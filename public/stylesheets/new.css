@@ -1,0 +1,310 @@
+html {
+    height: 100vh;
+}
+
+.background {
+    /* background-color: rgb(25,25,25); */
+    /* background-image: linear-gradient(rgb(67,130,248), rgb(210,234,226)); */
+    background-image: linear-gradient(rgb(48,64,80), rgb(96,112,128));
+    /* background-image: linear-gradient(rgb(49,45,58), rgb(115,98,107)); */
+}
+
+#panel {
+    background-color: rgb(50,50,50);
+    width: 274px;
+    height: 100vh;
+    border-right: 1px solid rgb(0,0,0);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* --------File, View------- */
+
+#panel-top {
+    height: 29px;
+    padding-left: 5px;
+    line-height: 29px;
+    color: rgb(225,225,225);
+    border-bottom: 1px solid rgb(0,0,0);
+    background-color: rgb(75,75,75);
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: default;
+    position: relative;
+}
+
+#panel-top > span {
+    display: inline-block;
+    height: 29px;
+    padding: 0 5px;
+    text-shadow: 1px 1px rgb(25,25,25);
+}
+
+#panel-top > span:hover::first-letter {
+    text-decoration: underline;
+}
+
+#file-menu {
+    position: absolute;
+    width: 173px;
+    background-color: rgb(75,75,75);
+    top: 30px;
+    left: 0px;
+    z-index: 1;
+}
+
+#view-menu {
+    position: absolute;
+    width: 173px;
+    background-color: rgb(75,75,75);
+    top: 30px;
+    left: 50px;
+    z-index: 1;
+}
+
+#panel-top > div > span {
+    display: block;
+    height: 30px;
+    padding: 0 10px;
+    border-right: 1px solid rgb(0,0,0);
+    border-left: 1px solid rgb(0,0,0);
+}
+
+#panel-top > div > span:last-child {
+    border-bottom: 1px solid rgb(0,0,0);
+}
+
+#panel-top > #file-menu > span {
+    border-left: none;
+}
+
+#panel-top > div > span:hover {
+    background-color: rgb(100,100,100);
+}
+
+/* -------Tool Buttons-------- */
+
+#tool-buttons {
+    height: 30px;
+    padding-left: 5px;
+}
+
+.button {
+    height: 24px;
+    width: 40px;
+    text-align: center;
+    line-height: 24px;
+    margin-top: 4px;
+    margin-right: 3px;
+    color: rgb(25,25,25);
+    background-color: rgb(75,75,75);
+    border: 1px solid black;
+    cursor: default;
+    float: left;
+    transition: 0.25s;
+}
+
+.button:hover {
+    color: rgb(225,225,225);
+    background-color: rgb(100,100,100);
+}
+
+.selected {
+    color: rgb(225,225,225);
+    background-color: rgb(100,100,100);
+    border-bottom: 1px solid skyblue;
+}
+
+/* -------Tile Panel------- */
+
+#tile-panel {
+    background-color: rgb(75,75,75);
+    margin: 4px 4px;
+    height: calc(100% - 366px);
+    border-radius: 2px;
+    border: 1px solid rgb(0,0,0);
+}
+
+#tile-panel-top {
+    background-color: rgb(75,75,75);
+    height: 18px;
+    border-radius: 2px;
+    color: rgb(225,225,225);
+    font-weight: bold;
+    line-height: 16px;
+    padding: 0 5px;
+    margin: 4px 4px;
+    letter-spacing: 1px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.25s;
+    border: 2px solid rgba(0, 0, 0, 0);
+}
+
+#tile-panel-top:hover{
+    background-color: rgba(255, 140, 0, 0.75);
+    border: 2px solid rgba(255, 140, 0, 0.5); 
+}
+
+#tileset {
+    width: 100%;
+    text-shadow: 1px 1px rgb(25,25,25);
+}
+
+.arrow {
+    position: absolute;
+    top: calc(50% - 8px);
+    right: 5px;
+}
+
+#tile-panel-window {
+    background-color: rgb(50,50,50);
+    height: calc(100% - 50px);
+    margin: 4px 4px;
+    border: 1px solid rgb(0,0,0);
+    padding: 7px 7px;
+    position: relative;
+}
+
+.tile {
+    display: inline-block;
+    height: 48px;
+    width: 48px;
+    background-image: url("../images/coldocean-tile32.png");
+    background-repeat: no-repeat;
+    background-size: 48px;
+    border: 2px solid rgba(0, 0, 0, 0);
+    border-radius: 5px;
+    transition: 0.25s;
+    margin: 4px 4px;
+    cursor: pointer;
+    /* background-color: rgb(25, 25, 25); */
+}
+
+.tile:hover {
+    /* background-color: rgba(255, 140, 0, 0.75);
+    border: 2px solid rgba(255, 140, 0, 0.5); */
+    background-color: skyblue;
+    border: 2px solid rgba(135, 207, 235, 0.5);
+    border-radius: 5px;
+}
+
+#tile-menu {
+    position: absolute;
+    height: 100%;
+    width: 254px;
+    top: 0px;
+    left: 0px;
+    background-color: rgb(25,25,25);
+}
+
+/* ---------Tool Panel------- */
+
+#tool-panel {
+    background-color: rgb(75,75,75);
+    margin: 0 4px;
+    height: 290px;
+    border-radius: 2px;
+    border: 1px solid black;
+}
+
+#tool-panel-top {
+    background-color: rgb(75,75,75);
+    height: 18px;
+    border-radius: 2px;
+    color: rgb(225,225,225);
+    font-weight: bold;
+    line-height: 16px;
+    letter-spacing: 1px;
+    padding: 0 5px;
+    margin: 4px 4px;
+    position: relative;
+    cursor: pointer;
+    transition: 0.25s;
+    border: 2px solid rgba(0, 0, 0, 0);
+}
+
+#tool-panel-top:hover {
+    background-color: rgba(255, 140, 0, 0.75);
+    border: 2px solid rgba(255, 140, 0, 0.5);
+}
+
+#tool {
+    width: 100%;
+    text-shadow: 1px 1px rgb(25,25,25);
+}
+
+#tool i {
+    position: absolute;
+    top: calc(50% - 8px);
+    right: 5px;
+}
+
+#tool-panel-window {
+    position: relative;
+    background-color: rgb(50,50,50);
+    height: calc(100% - 36px);
+    margin: 4px 4px;
+    border: 1px solid rgb(0,0,0);
+}
+
+/* Tool Menu */
+
+#tool-menu {
+    position: absolute;
+    height: 100%;
+    width: 254px;
+    top: 0px;
+    left: 0px;
+    background-color: rgb(25,25,25);
+    z-index: 1;
+}
+
+.menu-item {
+    display: block;
+    height: 30px;
+    padding: 0 10px;
+    color: rgb(225,225,225);
+    line-height: 30px;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    background-color: rgb(50,50,50);
+}
+
+/* Minimap Tool */
+
+#minimap {
+    position: absolute;
+    height: 100%;
+    width: 254px;
+    top: 0px;
+    left: 0px;
+}
+
+/* Layers Tool */
+
+#layers {
+    position: absolute;
+    height: 100%;
+    width: 254px;
+    top: 0px;
+    left: 0px;
+    background-color: green;
+}
+
+/* Animation Tool */
+
+#animation {
+    position: absolute;
+    height: 100%;
+    width: 254px;
+    top: 0px;
+    left: 0px;
+    background-color: blue;
+}
