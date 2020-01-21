@@ -7,8 +7,13 @@ var viewMenu = document.querySelector('#view-menu');
 
 var buttons = document.querySelectorAll('.button');
 
+var tilesetName = document.querySelector('#tileset-name');
 var tilePanelTop = document.querySelector('#tile-panel-top');
 var tileMenu = document.querySelector('#tile-menu');
+
+var uploadTileset = document.querySelector('#upload-tileset');
+var uploadForm = document.querySelector('#upload-form');
+var uploadFormWindow = document.querySelector('#upload-form-window');
 
 var tool = document.querySelector('#tool');
 var toolPanelTop = document.querySelector('#tool-panel-top');
@@ -23,10 +28,10 @@ var animation = document.querySelector('#animation');
 function closeMenu(event){
     console.log(event.target);
     if(event.target.id != 'file' && event.target.parentNode.id != 'file-menu'){
-        fileMenu.setAttribute("hidden", true);
+        fileMenu.setAttribute('hidden', true);
     }
     if(event.target.id != 'view' && event.target.parentNode.id != 'view-menu'){
-        viewMenu.setAttribute("hidden", true);
+        viewMenu.setAttribute('hidden', true);
     }
 }
 
@@ -37,26 +42,26 @@ html.addEventListener('mousedown', function(event){
 panelTop.addEventListener('mouseover', function(event) {
     if (fileMenu.hasAttribute('hidden') == false) {
         if (event.target.id == 'view') {
-            fileMenu.setAttribute("hidden", true);
-            viewMenu.toggleAttribute("hidden");
+            fileMenu.setAttribute('hidden', true);
+            viewMenu.toggleAttribute('hidden');
         }
     }
     if (viewMenu.hasAttribute('hidden') == false) {
         if (event.target.id == 'file') {
-            viewMenu.setAttribute("hidden", true);
-            fileMenu.toggleAttribute("hidden");
+            viewMenu.setAttribute('hidden', true);
+            fileMenu.toggleAttribute('hidden');
         }
     }
 })
 
 file.addEventListener('mousedown', function(event) {
-    viewMenu.setAttribute("hidden", true);
-    fileMenu.toggleAttribute("hidden");
+    viewMenu.setAttribute('hidden', true);
+    fileMenu.toggleAttribute('hidden');
 });
 
 view.addEventListener('mousedown', function(event) {
-    fileMenu.setAttribute("hidden", true);
-    viewMenu.toggleAttribute("hidden");
+    fileMenu.setAttribute('hidden', true);
+    viewMenu.toggleAttribute('hidden');
 });
 
 // --------Tool Buttons-------- //
@@ -76,20 +81,42 @@ buttons.forEach(function(button) {
 
 // --------Tile Panel--------- //
 
+let tilesetTitle = tilesetName.innerHTML;
 tilePanelTop.addEventListener('click', function() {
-    tileMenu.toggleAttribute("hidden");
+    if (tileMenu.hasAttribute('hidden')) {
+        tilesetName.innerHTML = "Tile Menu<i class='fas fa-caret-right fa-lg arrow'></i>";
+        tileMenu.removeAttribute('hidden');
+    } else {
+        tilesetName.innerHTML = tilesetTitle;
+        tileMenu.setAttribute('hidden', true);
+    }
 });
+
+uploadTileset.addEventListener('change', previewUpload);
+
+function previewUpload() {
+    while(uploadFormWindow.firstChild) {
+        uploadFormWindow.removeChild(uploadFormWindow.firstChild);
+    }
+    var tileset = uploadTileset.files;
+    // tileMenu.setAttribute('hidden', true);
+    uploadForm.removeAttribute('hidden');
+    var image = document.createElement('img');
+    image.src = window.URL.createObjectURL(tileset[0]);
+    uploadFormWindow.appendChild(image);
+
+}
 
 // --------Tool Panel--------- //
 
 let toolTitle = tool.innerHTML;
 toolPanelTop.addEventListener('click', function() {
-    if (toolMenu.hasAttribute("hidden")) {
+    if (toolMenu.hasAttribute('hidden')) {
         tool.innerHTML = "Tool Menu<i class='fas fa-caret-down fa-lg arrow'></i>";
-        toolMenu.removeAttribute("hidden");
+        toolMenu.removeAttribute('hidden');
     } else {
         tool.innerHTML = toolTitle;
-        toolMenu.setAttribute("hidden", true);
+        toolMenu.setAttribute('hidden', true);
     }
 });
 
@@ -117,7 +144,7 @@ menuItems.forEach(function(menuItem) {
                 tool.innerHTML = "Animation<i class='fas fa-caret-right fa-lg arrow'></i>";
                 toolTitle = tool.innerHTML;
             }
-            toolMenu.setAttribute("hidden", true);
+            toolMenu.setAttribute('hidden', true);
         }
         // if(menuItem.parentNode.id == 'tile-menu') {
         // }    
