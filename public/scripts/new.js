@@ -101,9 +101,7 @@ function previewUpload() {
     var tileset = uploadTileset.files;
     // tileMenu.setAttribute('hidden', true);
     uploadForm.removeAttribute('hidden');
-    var image = document.createElement('img');
-    image.src = window.URL.createObjectURL(tileset[0]);
-    uploadFormWindow.appendChild(image);
+    uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset[0]) + "')";
 
 }
 

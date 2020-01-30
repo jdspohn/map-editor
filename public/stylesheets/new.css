@@ -319,7 +319,7 @@ body {
     position: absolute;
     height: 500px;
     width: 300px;
-    top: calc(50% - 250px);
+    top: calc(50% - 300px);
     left: calc(50% - 150px);
     color: rgb(225,225,225);
     font-weight: bold;
@@ -358,7 +358,47 @@ body {
 
 
 #upload-form-window {
-    height: 200px;
+    height: 198px;
+    width: 298px;
+    margin: 0 1px;
     background-color: rgb(50,50,50);
-    /* border: 1px solid skyblue; */
+    /* box-shadow: inset 0 0 0 1px black; */
+    border-top: 1px solid rgba(0, 0, 0, 0);
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+    transition: 0.25s;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+#upload-form-window:hover {
+    border-top: 1px solid skyblue;
+    border-bottom: 1px solid skyblue;
+}
+
+#upload-form-options {
+    padding: 10px;
+}
+
+#upload-form-options > label {
+    display: block;
+    width: 100%;
+}
+
+#upload-form-options > label:not(:first-child) + input {
+    margin-right: 10px;
+}
+
+#upload-form-options > input {
+    width: calc(50% - 5px);
+    height: 20px;
+    margin: 5px 0px 20px 0px;
+    border: none;
+    /* border: 2px solid black; */
+}
+
+#upload-form-options > #new-tileset-name {
+    width: 100%;
 }
