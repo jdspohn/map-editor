@@ -14,6 +14,7 @@ var tileMenu = document.querySelector('#tile-menu');
 var uploadTileset = document.querySelector('#upload-tileset');
 var uploadForm = document.querySelector('#upload-form');
 var uploadFormWindow = document.querySelector('#upload-form-window');
+var uploadName = document.querySelector('#upload-name');
 
 var tool = document.querySelector('#tool');
 var toolPanelTop = document.querySelector('#tool-panel-top');
@@ -98,12 +99,20 @@ function previewUpload() {
     while(uploadFormWindow.firstChild) {
         uploadFormWindow.removeChild(uploadFormWindow.firstChild);
     }
-    var tileset = uploadTileset.files;
+    var tileset = uploadTileset.files[0];
     // tileMenu.setAttribute('hidden', true);
     uploadForm.removeAttribute('hidden');
-    uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset[0]) + "')";
-
+    uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
+    uploadName.value = tileset.name;
 }
+
+function closeForm() {
+    if(event.target.classList.contains('close-form') || event.target.parentNode.classList.contains('close-form')) {
+        uploadForm.setAttribute('hidden', true);
+    }
+}
+
+uploadForm.addEventListener('click', closeForm);
 
 // --------Tool Panel--------- //
 

@@ -55,20 +55,20 @@
             </div>
         </div>
     </div>
-    <div id="upload-form">
+    <div id="upload-form" hidden>
         <div id="upload-form-top">
             <span>Upload Tileset</span>
-            <div id="close-form"><i class="fas fa-times"></i></div>
+            <div class="close-form"><i class="fas fa-times"></i></div>
         </div>
         <div id="upload-form-window"></div>
         <div id="upload-form-options">
-            <label for="new-tileset-name">Tileset Name</label>
-            <input id="new-tileset-name" type="text">
+            <label for="upload-name">Tileset Name</label>
+            <input id="upload-name" type="text" placeholder="Tileset Name" data="">
             <label>Tile Dimensions</label>
-            <input id="tile-x" type="text"><input id="tile-y" type="text">
+            <input id="upload-tile-width" type="text" placeholder="Width"><input id="upload-tile-height" type="text" placeholder="Height">
             <label>Tile Padding</label>
-            <input id="padding-x" type="text"><input id="padding-y" type="text">
-                     
+            <input id="upload-padding-h" type="text" placeholder="Horizontal"><input id="upload-padding-v" type="text" placeholder="Vertical">
+            <div id="upload-form-accept" class="close-form">ACCEPT</div><div id="upload-form-cancel" class="close-form">CANCEL</div>         
         </div>
     </div>
 </body>
