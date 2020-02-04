@@ -15,6 +15,9 @@ var uploadTileset = document.querySelector('#upload-tileset');
 var uploadForm = document.querySelector('#upload-form');
 var uploadFormWindow = document.querySelector('#upload-form-window');
 var uploadName = document.querySelector('#upload-name');
+var uploadFormAccept = document.querySelector('#upload-form-accept');
+var numberInputs = document.querySelectorAll('.number-input');
+var uploadInputs = document.querySelectorAll('#upload-form-options input');
 
 var tool = document.querySelector('#tool');
 var toolPanelTop = document.querySelector('#tool-panel-top');
@@ -94,7 +97,6 @@ tilePanelTop.addEventListener('click', function() {
 });
 
 uploadTileset.addEventListener('change', previewUpload);
-
 function previewUpload() {
     while(uploadFormWindow.firstChild) {
         uploadFormWindow.removeChild(uploadFormWindow.firstChild);
@@ -106,13 +108,39 @@ function previewUpload() {
     uploadName.value = tileset.name;
 }
 
+uploadForm.addEventListener('click', closeForm);
 function closeForm() {
     if(event.target.classList.contains('close-form') || event.target.parentNode.classList.contains('close-form')) {
         uploadForm.setAttribute('hidden', true);
     }
 }
 
-uploadForm.addEventListener('click', closeForm);
+uploadFormAccept.addEventListener('click', workpls);
+function verifyInput() {
+    if (uploadName.value == "" || uploadName.value == undefined){
+        uploadName.classList.add('invalid');
+    } else {
+        uploadName.classList.remove('invalid');
+    }
+    numberInputs.forEach(function(numberInput){
+        let NiV = numberInput.value;
+        if (isNaN(NiV) || NiV == "" || NiV == undefined) {
+            numberInput.classList.add('invalid');
+        } else {
+            numberInput.classList.remove('invalid');
+        }
+    });
+    uploadInputs.forEach(function(input){
+        if (input.classList.contains('invalid')){
+            return false;
+        };
+    });
+}
+
+function workpls(){
+    verifyInput();
+    console.log("hey");
+}
 
 // --------Tool Panel--------- //
 
