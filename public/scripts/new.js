@@ -10,6 +10,9 @@ var buttons = document.querySelectorAll('.button');
 var tilesetName = document.querySelector('#tileset-name');
 var tilePanelTop = document.querySelector('#tile-panel-top');
 var tileMenu = document.querySelector('#tile-menu');
+var tilePanelWindow = document.querySelector('#tile-panel-window');
+var tilesetsContainer = document.querySelector('#tilesets-container');
+var tilesets = [];
 
 var uploadTileset = document.querySelector('#upload-tileset');
 var uploadForm = document.querySelector('#upload-form');
@@ -87,12 +90,14 @@ buttons.forEach(function(button) {
 
 let tilesetTitle = tilesetName.innerHTML;
 tilePanelTop.addEventListener('click', function() {
-    if (tileMenu.hasAttribute('hidden')) {
-        tilesetName.innerHTML = "Tile Menu<i class='fas fa-caret-right fa-lg arrow'></i>";
-        tileMenu.removeAttribute('hidden');
-    } else {
-        tilesetName.innerHTML = tilesetTitle;
-        tileMenu.setAttribute('hidden', true);
+    if(tilesetsContainer.firstChild){
+        if (tileMenu.hasAttribute('hidden')) {
+            tilesetName.innerHTML = "Tile Menu<i class='fas fa-caret-right fa-lg arrow'></i>";
+            tileMenu.removeAttribute('hidden');
+        } else {
+            tilesetName.innerHTML = tilesetTitle;
+            tileMenu.setAttribute('hidden', true);
+        }
     }
 });
 
@@ -102,7 +107,6 @@ function previewUpload() {
         uploadFormWindow.removeChild(uploadFormWindow.firstChild);
     }
     var tileset = uploadTileset.files[0];
-    // tileMenu.setAttribute('hidden', true);
     uploadForm.removeAttribute('hidden');
     uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
     uploadName.value = tileset.name;
@@ -115,31 +119,56 @@ function closeForm() {
     }
 }
 
-uploadFormAccept.addEventListener('click', workpls);
+uploadFormAccept.addEventListener('click', populateTileset);
+
 function verifyInput() {
+    let valid = true;
     if (uploadName.value == "" || uploadName.value == undefined){
         uploadName.classList.add('invalid');
+        nameValid = false;
     } else {
         uploadName.classList.remove('invalid');
     }
     numberInputs.forEach(function(numberInput){
         let NiV = numberInput.value;
-        if (isNaN(NiV) || NiV == "" || NiV == undefined) {
+        if (isNaN(NiV) || NiV == "") {
             numberInput.classList.add('invalid');
+            valid = false;
         } else {
             numberInput.classList.remove('invalid');
         }
     });
-    uploadInputs.forEach(function(input){
-        if (input.classList.contains('invalid')){
-            return false;
-        };
-    });
+    return valid;
 }
 
-function workpls(){
-    verifyInput();
-    console.log("hey");
+function populateTileset() { 
+    if (verifyInput()) {
+        uploadForm.setAttribute('hidden', true);
+        let newTileset = document.createElement('div');
+        let newTilesetLabel = document.createElement('label');
+        newTileset.id = String(uploadName.value) + "-ts";
+        newTileset.classList.add('tile-panel-window-content');
+        tilesetsContainer.appendChild(newTileset);
+        newTilesetLabel.classList.add('menu-item');
+        newTilesetLabel.innerHTML = String(uploadName.value);
+        tileMenu.appendChild(newTilesetLabel);
+        tilesetName.innerHTML = uploadName.value + "<i class='fas fa-caret-right fa-lg arrow'></i>";
+        tilesetTitle = tilesetName.innerHTML;
+        tileMenu.setAttribute('hidden', true);
+        newTileset.style.backgroundImage = "url('" + window.URL.createObjectURL(uploadTileset.files[0]) + "')"
+
+        newTilesetLabel.addEventListener('click', function(){
+            tilesets.forEach(function(tileset){
+                tileset.setAttribute('hidden', true);
+            });
+            newTileset.removeAttribute('hidden');
+            tileMenu.setAttribute('hidden', true);
+            tilesetName.innerHTML = String(newTileset.id.slice(0, (newTileset.id.length - 3))) + "<i class='fas fa-caret-right fa-lg arrow'></i>"
+            tilesetTitle = tilesetName.innerHTML;
+        });
+
+        tilesets.push(newTileset);
+    }
 }
 
 // --------Tool Panel--------- //
@@ -181,7 +210,5 @@ menuItems.forEach(function(menuItem) {
             }
             toolMenu.setAttribute('hidden', true);
         }
-        // if(menuItem.parentNode.id == 'tile-menu') {
-        // }    
     });
 });

@@ -197,13 +197,17 @@ body {
     border-radius: 5px;
 }
 
-#tile-menu {
+.tile-panel-window-content {
     position: absolute;
     height: 100%;
     width: 254px;
     top: 0px;
     left: 0px;
     background-color: rgb(25,25,25);
+}
+
+#tile-menu {
+    z-index: 1;
 }
 
 /* ---------Tool Panel------- */
