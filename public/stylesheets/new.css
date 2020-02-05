@@ -58,7 +58,7 @@ body {
     background-color: rgb(75,75,75);
     top: 30px;
     left: 0px;
-    z-index: 1;
+    z-index: 2;
 }
 
 #view-menu {
@@ -67,7 +67,7 @@ body {
     background-color: rgb(75,75,75);
     top: 30px;
     left: 50px;
-    z-index: 1;
+    z-index: 2;
 }
 
 #panel-top > div > span {
@@ -178,14 +178,16 @@ body {
     display: inline-block;
     height: 48px;
     width: 48px;
-    background-image: url("../images/coldocean-tile32.png");
     background-repeat: no-repeat;
+    background-position: center;
     background-size: 48px;
     border: 2px solid rgba(0, 0, 0, 0);
     border-radius: 5px;
     transition: 0.25s;
     margin: 4px 4px;
     cursor: pointer;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
     /* background-color: rgb(25, 25, 25); */
 }
 
@@ -199,14 +201,21 @@ body {
 
 .tile-panel-window-content {
     position: absolute;
+    height: calc(100% - 14px);
+    width: 240px;
+    top: 0px;
+    left: 0px;
+    padding: 7px 7px;
+    background-color: rgb(50,50,50);
+}
+
+#tile-menu {
+    position: absolute;
     height: 100%;
     width: 254px;
     top: 0px;
     left: 0px;
     background-color: rgb(25,25,25);
-}
-
-#tile-menu {
     z-index: 1;
 }
 

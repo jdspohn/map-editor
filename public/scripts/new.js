@@ -18,6 +18,10 @@ var uploadTileset = document.querySelector('#upload-tileset');
 var uploadForm = document.querySelector('#upload-form');
 var uploadFormWindow = document.querySelector('#upload-form-window');
 var uploadName = document.querySelector('#upload-name');
+var uploadTileWidth = document.querySelector('#upload-tile-width');
+var uploadTileHeight = document.querySelector('#upload-tile-height');
+var uploadPaddingH = document.querySelector('#upload-padding-h');
+var uploadPaddingV = document.querySelector('#upload-padding-v');
 var uploadFormAccept = document.querySelector('#upload-form-accept');
 var numberInputs = document.querySelectorAll('.number-input');
 var uploadInputs = document.querySelectorAll('#upload-form-options input');
@@ -101,15 +105,37 @@ tilePanelTop.addEventListener('click', function() {
     }
 });
 
+var fileTypes = [
+    'image/jpg',
+    'image/jpeg',
+    'image/png',
+    'image/gif'
+  ]
+  
+function validFileType(file) {
+    for(var i = 0; i < fileTypes.length; i++) {
+      if(file.type === fileTypes[i]) {
+        return true;
+      }
+    }
+  
+    return false;
+  }
+
 uploadTileset.addEventListener('change', previewUpload);
 function previewUpload() {
     while(uploadFormWindow.firstChild) {
         uploadFormWindow.removeChild(uploadFormWindow.firstChild);
     }
     var tileset = uploadTileset.files[0];
-    uploadForm.removeAttribute('hidden');
-    uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
-    uploadName.value = tileset.name;
+    if (validFileType(tileset)){
+        uploadForm.removeAttribute('hidden');
+        uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
+        uploadName.value = tileset.name;
+    } else {
+        alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.")
+    }
+    
 }
 
 uploadForm.addEventListener('click', closeForm);
@@ -119,7 +145,7 @@ function closeForm() {
     }
 }
 
-uploadFormAccept.addEventListener('click', populateTileset);
+uploadFormAccept.addEventListener('click', buildTileset);
 
 function verifyInput() {
     let valid = true;
@@ -141,21 +167,63 @@ function verifyInput() {
     return valid;
 }
 
-function populateTileset() { 
+function populateTileset(file, newTileset){
+    var tileWidth = Number(uploadTileWidth.value);
+    var tileHeight = Number(uploadTileHeight.value);
+    var tilePaddingH = Number(uploadPaddingH.value);
+    var tilePaddingV = Number(uploadPaddingV.value);
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = tileWidth;
+    canvas.height = tileHeight;
+
+    var tileset = new Image();
+        tileset.onload = function() {
+            var columns = (tileset.width / (tileWidth + tilePaddingH));
+            var rows = (tileset.height / (tileHeight + tilePaddingV));
+
+            for(var i = 0; i < rows; i++){
+                for(var j = 0; j < columns; j++){
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    const sx = (j * tileWidth),
+                          sy = (i * tileHeight),
+                          sw = tileWidth,
+                          sh = tileHeight,
+                          dx = 0,
+                          dy = 0,
+                          dw = sw,
+                          dh = sh;
+                    ctx.drawImage(tileset, sx, sy, sw, sh, dx, dy, dw, dh);
+
+                    const tile = document.createElement('div');
+                    tile.style.backgroundImage = 'url(' + canvas.toDataURL() + ')';
+                    tile.classList.add('tile');
+                    newTileset.appendChild(tile);
+                }
+            }
+        };
+        tileset.src = window.URL.createObjectURL(file);
+}
+
+function buildTileset() { 
     if (verifyInput()) {
         uploadForm.setAttribute('hidden', true);
+        
         let newTileset = document.createElement('div');
-        let newTilesetLabel = document.createElement('label');
         newTileset.id = String(uploadName.value) + "-ts";
         newTileset.classList.add('tile-panel-window-content');
         tilesetsContainer.appendChild(newTileset);
+
+        let newTilesetLabel = document.createElement('label');
         newTilesetLabel.classList.add('menu-item');
         newTilesetLabel.innerHTML = String(uploadName.value);
         tileMenu.appendChild(newTilesetLabel);
+
         tilesetName.innerHTML = uploadName.value + "<i class='fas fa-caret-right fa-lg arrow'></i>";
         tilesetTitle = tilesetName.innerHTML;
+
         tileMenu.setAttribute('hidden', true);
-        newTileset.style.backgroundImage = "url('" + window.URL.createObjectURL(uploadTileset.files[0]) + "')"
 
         newTilesetLabel.addEventListener('click', function(){
             tilesets.forEach(function(tileset){
@@ -166,8 +234,8 @@ function populateTileset() {
             tilesetName.innerHTML = String(newTileset.id.slice(0, (newTileset.id.length - 3))) + "<i class='fas fa-caret-right fa-lg arrow'></i>"
             tilesetTitle = tilesetName.innerHTML;
         });
-
         tilesets.push(newTileset);
+        populateTileset(uploadTileset.files[0], newTileset);
     }
 }
 
