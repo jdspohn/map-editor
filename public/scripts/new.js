@@ -22,6 +22,8 @@ var uploadTileWidth = document.querySelector('#upload-tile-width');
 var uploadTileHeight = document.querySelector('#upload-tile-height');
 var uploadPaddingH = document.querySelector('#upload-padding-h');
 var uploadPaddingV = document.querySelector('#upload-padding-v');
+var uploadMarginH = document.querySelector('#upload-margin-h');
+var uploadMarginV = document.querySelector('#upload-margin-v');
 var uploadFormAccept = document.querySelector('#upload-form-accept');
 var numberInputs = document.querySelectorAll('.number-input');
 var uploadInputs = document.querySelectorAll('#upload-form-options input');
@@ -151,7 +153,7 @@ function verifyInput() {
     let valid = true;
     if (uploadName.value == "" || uploadName.value == undefined){
         uploadName.classList.add('invalid');
-        nameValid = false;
+        valid = false;
     } else {
         uploadName.classList.remove('invalid');
     }
@@ -172,6 +174,8 @@ function populateTileset(file, newTileset){
     var tileHeight = Number(uploadTileHeight.value);
     var tilePaddingH = Number(uploadPaddingH.value);
     var tilePaddingV = Number(uploadPaddingV.value);
+    var tileMarginH = Number(uploadMarginH.value)
+    var tileMarginV = Number(uploadMarginV.value)
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -180,14 +184,14 @@ function populateTileset(file, newTileset){
 
     var tileset = new Image();
         tileset.onload = function() {
-            var columns = (tileset.width / (tileWidth + tilePaddingH));
-            var rows = (tileset.height / (tileHeight + tilePaddingV));
+            var columns = (((tileset.width - (tileMarginH * 2)) + tilePaddingH) / (tileWidth + tilePaddingH));
+            var rows = (((tileset.height - (tileMarginV * 2)) + tilePaddingV) / (tileHeight + tilePaddingV));
 
             for(var i = 0; i < rows; i++){
                 for(var j = 0; j < columns; j++){
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    const sx = (j * tileWidth),
-                          sy = (i * tileHeight),
+                    const sx = tileMarginH + (j * (tileWidth + tilePaddingH)),
+                          sy = tileMarginV + (i * (tileHeight + tilePaddingV)),
                           sw = tileWidth,
                           sh = tileHeight,
                           dx = 0,
@@ -234,6 +238,7 @@ function buildTileset() {
             tilesetName.innerHTML = String(newTileset.id.slice(0, (newTileset.id.length - 3))) + "<i class='fas fa-caret-right fa-lg arrow'></i>"
             tilesetTitle = tilesetName.innerHTML;
         });
+
         tilesets.push(newTileset);
         populateTileset(uploadTileset.files[0], newTileset);
     }

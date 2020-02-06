@@ -140,7 +140,7 @@ body {
     color: rgb(225,225,225);
     font-weight: bold;
     line-height: 16px;
-    padding: 0 5px;
+    padding: 0 20px 0 5px;
     margin: 4px 4px;
     letter-spacing: 1px;
     position: relative;
@@ -155,8 +155,13 @@ body {
 }
 
 #tileset-name {
+    height: 100%;
     width: 100%;
     text-shadow: 1px 1px rgb(25,25,25);
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .arrow {
@@ -207,6 +212,7 @@ body {
     left: 0px;
     padding: 7px 7px;
     background-color: rgb(50,50,50);
+    overflow-y: auto;
 }
 
 #tile-menu {
@@ -288,6 +294,9 @@ body {
     color: rgb(225,225,225);
     line-height: 30px;
     cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .menu-item:hover {
@@ -330,9 +339,9 @@ body {
 
 #upload-form {
     position: absolute;
-    height: 500px;
+    height: 545px;
     width: 300px;
-    top: calc(50% - 300px);
+    top: calc(50% - 282.5px);
     left: calc(50% - 150px);
     color: rgb(225,225,225);
     font-weight: bold;
@@ -405,7 +414,7 @@ body {
 #upload-form-options > input {
     width: calc(50% - 25px);
     height: 25px;
-    margin: 5px 0px 15px 0px;
+    margin: 5px 0px 10px 0px;
     border: none;
     padding: 0px 10px;
     /* box-shadow: inset 0 0 0 2px black; */
