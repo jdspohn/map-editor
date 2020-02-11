@@ -153,12 +153,15 @@ uploadFormAccept.addEventListener('click', buildTileset);
 
 function verifyInput() {
     let valid = true;
-    if (uploadName.value == "" || uploadName.value == undefined){
-        uploadName.classList.add('invalid');
-        valid = false;
-    } else {
-        uploadName.classList.remove('invalid');
-    }
+    tilesets.forEach(function(tileset) {
+        if (uploadName.value == tileset.name || uploadName.value == "" || uploadName.value == undefined){
+            uploadName.classList.add('invalid');
+            valid = false;
+        } else {
+            uploadName.classList.remove('invalid');
+        }
+    });
+    
     numberInputs.forEach(function(numberInput){
         let NiV = numberInput.value;
         if (isNaN(NiV) || NiV == "") {
@@ -205,7 +208,7 @@ function populateTileset(file, newTileset){
                     const tile = document.createElement('div');
                     tile.style.backgroundImage = 'url(' + canvas.toDataURL() + ')';
                     tile.classList.add('tile');
-                    newTileset.appendChild(tile);
+                    newTileset.wrapper.appendChild(tile);
                 }
             }
         };
@@ -215,37 +218,76 @@ function populateTileset(file, newTileset){
 function buildTileset() { 
     if (verifyInput()) {
         uploadForm.setAttribute('hidden', true);
-        
-        let newTileset = document.createElement('div');
-        newTileset.id = String(uploadName.value) + "-ts";
-        newTileset.classList.add('tile-panel-window-content');
-        tilesetsContainer.appendChild(newTileset);
 
-        let newTilesetLabel = document.createElement('label');
-        newTilesetLabel.classList.add('menu-item');
-        newTilesetLabel.innerHTML = String(uploadName.value);
-        tileMenu.appendChild(newTilesetLabel);
+        const newTilesetName = String(uploadName.value),
+              newTilesetFile = uploadTileset.files[0],
+              newTilesetTitle = newTilesetName + "<i class='fas fa-caret-right fa-lg arrow'></i>";
 
-        tilesetName.innerHTML = uploadName.value + "<i class='fas fa-caret-right fa-lg arrow'></i>";
-        tilesetTitle = tilesetName.innerHTML;
+        // create tileset wrapper div and label
+        const wrapper = document.createElement('div'),
+              label = document.createElement('label');
 
+        wrapper.id = newTilesetName + '-ts';
+        wrapper.classList.add('tile-panel-window-content');
+        tilesetsContainer.appendChild(wrapper);
+
+        label.innerHTML = newTilesetName;
+        label.classList.add('menu-item');
+        tileMenu.appendChild(label);
+
+        // updating tileset pane with this tile information
+        tilesetTitle = newTilesetTitle;
+        tilesetName.innerHTML = tilesetTitle;
         tileMenu.setAttribute('hidden', true);
 
-        newTilesetLabel.addEventListener('click', function(){
-            tilesets.forEach(function(tileset){
-                tileset.setAttribute('hidden', true);
+        // add event listener for switching to this tileset from the menu
+        label.addEventListener('click', function() {
+
+            // hide all tileset panes
+            tilesets.forEach(function(tileset) {
+                tileset.wrapper.setAttribute('hidden', true);
             });
-            newTileset.removeAttribute('hidden');
+            wrapper.removeAttribute('hidden');
             tileMenu.setAttribute('hidden', true);
-            tilesetName.innerHTML = String(newTileset.id.slice(0, (newTileset.id.length - 3))) + "<i class='fas fa-caret-right fa-lg arrow'></i>"
-            tilesetTitle = tilesetName.innerHTML;
+
+            tilesetTitle = newTilesetTitle;
+            tilesetName.innerHTML = newTilesetTitle;
         });
 
+        const newTileset = new Tileset(newTilesetName, wrapper);
         tilesets.push(newTileset);
-        populateTileset(uploadTileset.files[0], newTileset);
+
+        populateTileset(newTilesetFile, newTileset);
+        
+        // let newTileset = document.createElement('div');
+        // newTileset.id = String(uploadName.value) + "-ts";
+        // newTileset.classList.add('tile-panel-window-content');
+        // tilesetsContainer.appendChild(newTileset);
+
+        // let newTilesetLabel = document.createElement('label');
+        // newTilesetLabel.classList.add('menu-item');
+        // newTilesetLabel.innerHTML = String(uploadName.value);
+        // tileMenu.appendChild(newTilesetLabel);
+
+        // tilesetName.innerHTML = uploadName.value + "<i class='fas fa-caret-right fa-lg arrow'></i>";
+        // tilesetTitle = tilesetName.innerHTML;
+
+        // tileMenu.setAttribute('hidden', true);
+
+        // newTilesetLabel.addEventListener('click', function(){
+        //     tilesets.forEach(function(tileset){
+        //         tileset.setAttribute('hidden', true);
+        //     });
+        //     newTileset.removeAttribute('hidden');
+        //     tileMenu.setAttribute('hidden', true);
+        //     tilesetName.innerHTML = String(newTileset.id.slice(0, (newTileset.id.length - 3))) + "<i class='fas fa-caret-right fa-lg arrow'></i>"
+        //     tilesetTitle = tilesetName.innerHTML;
+        // });
+
+        // tilesets.push(newTileset);
+        // populateTileset(uploadTileset.files[0], newTileset);
     }
 }
-
 // --------Tool Panel--------- //
 
 let toolTitle = toolName.innerHTML;
