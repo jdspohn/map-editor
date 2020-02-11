@@ -28,10 +28,12 @@ var uploadFormAccept = document.querySelector('#upload-form-accept');
 var numberInputs = document.querySelectorAll('.number-input');
 var uploadInputs = document.querySelectorAll('#upload-form-options input');
 
-var tool = document.querySelector('#tool');
+var toolName = document.querySelector('#tool-name');
 var toolPanelTop = document.querySelector('#tool-panel-top');
 var toolMenu = document.querySelector('#tool-menu');
-var menuItems = document.querySelectorAll('.menu-item');
+var toolLabels = document.querySelectorAll('.tool-label');
+
+var tools = document.querySelectorAll('.tool');
 var minimap = document.querySelector('#minimap');
 var layers = document.querySelector('#layers');
 var animation = document.querySelector('#animation');
@@ -246,42 +248,25 @@ function buildTileset() {
 
 // --------Tool Panel--------- //
 
-let toolTitle = tool.innerHTML;
+let toolTitle = toolName.innerHTML;
 toolPanelTop.addEventListener('click', function() {
     if (toolMenu.hasAttribute('hidden')) {
-        tool.innerHTML = "Tool Menu<i class='fas fa-caret-down fa-lg arrow'></i>";
+        toolName.innerHTML = "Tool Menu<i class='fas fa-caret-right fa-lg arrow'></i>";
         toolMenu.removeAttribute('hidden');
     } else {
-        tool.innerHTML = toolTitle;
+        toolName.innerHTML = toolTitle;
         toolMenu.setAttribute('hidden', true);
     }
 });
 
-menuItems.forEach(function(menuItem) {
-    menuItem.addEventListener('click', function(event) {
-        if (menuItem.parentNode.id == 'tool-menu') {
-            if (event.target.id == 'tool-menu-minimap') {
-                minimap.removeAttribute('hidden');
-                layers.setAttribute('hidden', true);
-                animation.setAttribute('hidden', true);
-                tool.innerHTML = "Minimap<i class='fas fa-caret-right fa-lg arrow'></i>";
-                toolTitle = tool.innerHTML;
-            }
-            if (event.target.id == 'tool-menu-layers') {
-                layers.removeAttribute('hidden');
-                minimap.setAttribute('hidden', true);
-                animation.setAttribute('hidden', true);
-                tool.innerHTML = "Layers<i class='fas fa-caret-right fa-lg arrow'></i>";
-                toolTitle = tool.innerHTML;
-            }
-            if (event.target.id == 'tool-menu-animation') {
-                animation.removeAttribute('hidden');
-                minimap.setAttribute('hidden', true);
-                layers.setAttribute('hidden', true);
-                tool.innerHTML = "Animation<i class='fas fa-caret-right fa-lg arrow'></i>";
-                toolTitle = tool.innerHTML;
-            }
-            toolMenu.setAttribute('hidden', true);
-        }
+toolLabels.forEach(function(label, arrayIndex) {
+    label.addEventListener('click', function(event) {
+        tools.forEach(function(tool) {
+            tool.setAttribute('hidden', true);
+        });
+        tools[arrayIndex].removeAttribute('hidden');
+        toolMenu.setAttribute('hidden', true);
+        toolName.innerHTML = toolLabels[arrayIndex].textContent + "<i class='fas fa-caret-right fa-lg arrow'></i>"
+        toolTitle = toolName.innerHTML;
     });
 });
