@@ -52,6 +52,10 @@ body {
     text-decoration: underline;
 }
 
+/* .underline-first::first-letter {
+    text-decoration: underline;
+} */
+
 #file-menu {
     position: absolute;
     width: 173px;
@@ -194,6 +198,9 @@ body {
     image-rendering: pixelated;
     image-rendering: crisp-edges;
     /* background-color: rgb(25, 25, 25); */
+}
+.tile-panel-window-content.tile-overflow > .tile {
+    margin: 4px 1.5px;
 }
 
 .tile:hover {
@@ -378,6 +385,7 @@ body {
 
 
 #upload-form-window {
+    position: relative;
     height: 198px;
     width: 298px;
     margin: 0 1px;
@@ -395,6 +403,12 @@ body {
 #upload-form-window:hover {
     border-top: 1px solid skyblue;
     border-bottom: 1px solid skyblue;
+}
+
+.dimensions {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
 }
 
 #upload-form-options {

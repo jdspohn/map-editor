@@ -133,9 +133,26 @@ function previewUpload() {
     }
     var tileset = uploadTileset.files[0];
     if (validFileType(tileset)){
-        uploadForm.removeAttribute('hidden');
+
+        uploadInputs.forEach(function(input) {
+            input.classList.remove('invalid');
+        });
+
         uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
         uploadName.value = tileset.name;
+
+        // display upload dimensions
+        const uploadDimensions = new Image();
+        uploadDimensions.src = window.URL.createObjectURL(tileset);
+        uploadDimensions.onload = function(){
+            var dimensions = document.createElement('span');
+            dimensions.innerHTML = String(uploadDimensions.width + " x " + uploadDimensions.height);
+            dimensions.classList.add('dimensions');
+            uploadFormWindow.appendChild(dimensions);
+        }
+
+        uploadForm.removeAttribute('hidden');
+        
     } else {
         alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.")
     }
@@ -174,13 +191,13 @@ function verifyInput() {
     return valid;
 }
 
-function populateTileset(file, newTileset){
+function populateTileset(file, newTileset) {
     var tileWidth = Number(uploadTileWidth.value);
     var tileHeight = Number(uploadTileHeight.value);
     var tilePaddingH = Number(uploadPaddingH.value);
     var tilePaddingV = Number(uploadPaddingV.value);
-    var tileMarginH = Number(uploadMarginH.value)
-    var tileMarginV = Number(uploadMarginV.value)
+    var tileMarginH = Number(uploadMarginH.value);
+    var tileMarginV = Number(uploadMarginV.value);
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -189,11 +206,12 @@ function populateTileset(file, newTileset){
 
     var tileset = new Image();
         tileset.onload = function() {
+
             var columns = (((tileset.width - (tileMarginH * 2)) + tilePaddingH) / (tileWidth + tilePaddingH));
             var rows = (((tileset.height - (tileMarginV * 2)) + tilePaddingV) / (tileHeight + tilePaddingV));
 
-            for(var i = 0; i < rows; i++){
-                for(var j = 0; j < columns; j++){
+            for(var i = 0; i < rows; i++) {
+                for(var j = 0; j < columns; j++) {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     const sx = tileMarginH + (j * (tileWidth + tilePaddingH)),
                           sy = tileMarginV + (i * (tileHeight + tilePaddingV)),
@@ -210,6 +228,9 @@ function populateTileset(file, newTileset){
                     tile.classList.add('tile');
                     newTileset.wrapper.appendChild(tile);
                 }
+            }
+            if (newTileset.wrapper.scrollHeight > newTileset.wrapper.clientHeight  || newTileset.wrapper.scrollWidth > newTileset.wrapper.clientWidth) {
+                newTileset.wrapper.classList.add('tile-overflow');
             }
         };
         tileset.src = window.URL.createObjectURL(file);
