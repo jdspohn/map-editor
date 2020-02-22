@@ -134,10 +134,6 @@ function previewUpload() {
     var tileset = uploadTileset.files[0];
     if (validFileType(tileset)){
 
-        uploadInputs.forEach(function(input) {
-            input.classList.remove('invalid');
-        });
-
         uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
         uploadName.value = tileset.name;
 
@@ -152,7 +148,7 @@ function previewUpload() {
         }
 
         uploadForm.removeAttribute('hidden');
-        
+
     } else {
         alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.")
     }
@@ -170,12 +166,14 @@ uploadFormAccept.addEventListener('click', buildTileset);
 
 function verifyInput() {
     let valid = true;
+    uploadInputs.forEach(function(input) {
+        input.classList.remove('invalid');
+    });
+    
     tilesets.forEach(function(tileset) {
         if (uploadName.value == tileset.name || uploadName.value == "" || uploadName.value == undefined){
             uploadName.classList.add('invalid');
             valid = false;
-        } else {
-            uploadName.classList.remove('invalid');
         }
     });
     
@@ -229,6 +227,7 @@ function populateTileset(file, newTileset) {
                     newTileset.wrapper.appendChild(tile);
                 }
             }
+            // styling for tileset window in the case of overflow
             if (newTileset.wrapper.scrollHeight > newTileset.wrapper.clientHeight  || newTileset.wrapper.scrollWidth > newTileset.wrapper.clientWidth) {
                 newTileset.wrapper.classList.add('tile-overflow');
             }
@@ -273,12 +272,29 @@ function buildTileset() {
 
             tilesetTitle = newTilesetTitle;
             tilesetName.innerHTML = newTilesetTitle;
+
+            if (wrapper.scrollHeight > wrapper.clientHeight  || wrapper.scrollWidth > wrapper.clientWidth) {
+                wrapper.classList.add('tile-overflow');
+            } else {
+                wrapper.classList.remove('tile-overflow');
+            }
+            
         });
 
         const newTileset = new Tileset(newTilesetName, wrapper);
         tilesets.push(newTileset);
 
         populateTileset(newTilesetFile, newTileset);
+       
+        window.onresize = function() {
+            tilesets.forEach(function(tileset){
+                if (tileset.wrapper.scrollHeight > tileset.wrapper.clientHeight  || tileset.wrapper.scrollWidth > tileset.wrapper.clientWidth) {
+                    tileset.wrapper.classList.add('tile-overflow');
+                } else {
+                    tileset.wrapper.classList.remove('tile-overflow');
+                }
+            });
+        };
         
         // let newTileset = document.createElement('div');
         // newTileset.id = String(uploadName.value) + "-ts";
@@ -309,6 +325,7 @@ function buildTileset() {
         // populateTileset(uploadTileset.files[0], newTileset);
     }
 }
+
 // --------Tool Panel--------- //
 
 let toolTitle = toolName.innerHTML;

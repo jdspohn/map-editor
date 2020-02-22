@@ -135,6 +135,7 @@ body {
     height: calc(100% - 366px);
     border-radius: 2px;
     border: 1px solid rgb(0,0,0);
+    min-height: 105px;
 }
 
 #tile-panel-top {
@@ -361,6 +362,7 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    z-index: 2;
 }
 
 #upload-form-top {
