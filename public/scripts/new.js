@@ -22,8 +22,10 @@ var uploadTileWidth = document.querySelector('#upload-tile-width');
 var uploadTileHeight = document.querySelector('#upload-tile-height');
 var uploadPaddingH = document.querySelector('#upload-padding-h');
 var uploadPaddingV = document.querySelector('#upload-padding-v');
-var uploadMarginH = document.querySelector('#upload-margin-h');
-var uploadMarginV = document.querySelector('#upload-margin-v');
+var uploadMarginLeft = document.querySelector('#upload-margin-left');
+var uploadMarginRight = document.querySelector('#upload-margin-right');
+var uploadMarginTop = document.querySelector('#upload-margin-top');
+var uploadMarginBot = document.querySelector('#upload-margin-bot');
 var uploadFormAccept = document.querySelector('#upload-form-accept');
 var numberInputs = document.querySelectorAll('.number-input');
 var uploadInputs = document.querySelectorAll('#upload-form-options input');
@@ -109,6 +111,8 @@ tilePanelTop.addEventListener('click', function() {
     }
 });
 
+// ---------Tileset Upload Form--------- //
+
 var fileTypes = [
     'image/jpg',
     'image/jpeg',
@@ -189,13 +193,17 @@ function verifyInput() {
     return valid;
 }
 
+// --------Tileset Building-------- //
+
 function populateTileset(file, newTileset) {
     var tileWidth = Number(uploadTileWidth.value);
     var tileHeight = Number(uploadTileHeight.value);
     var tilePaddingH = Number(uploadPaddingH.value);
     var tilePaddingV = Number(uploadPaddingV.value);
-    var tileMarginH = Number(uploadMarginH.value);
-    var tileMarginV = Number(uploadMarginV.value);
+    var tileMarginLeft = Number(uploadMarginLeft.value);
+    var tileMarginRight = Number(uploadMarginRight.value);
+    var tileMarginTop = Number(uploadMarginTop.value);
+    var tileMarginBot = Number(uploadMarginBot.value);
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -205,14 +213,17 @@ function populateTileset(file, newTileset) {
     var tileset = new Image();
         tileset.onload = function() {
 
-            var columns = (((tileset.width - (tileMarginH * 2)) + tilePaddingH) / (tileWidth + tilePaddingH));
-            var rows = (((tileset.height - (tileMarginV * 2)) + tilePaddingV) / (tileHeight + tilePaddingV));
+            var columns = (((tileset.width - (tileMarginLeft + tileMarginRight)) + tilePaddingH) / (tileWidth + tilePaddingH));
+            var rows = (((tileset.height - (tileMarginTop + tileMarginBot)) + tilePaddingV) / (tileHeight + tilePaddingV));
+
+            // var columns = (((tileset.width - (tileMarginH * 2)) + tilePaddingH) / (tileWidth + tilePaddingH));
+            // var rows = (((tileset.height - (tileMarginV * 2)) + tilePaddingV) / (tileHeight + tilePaddingV));
 
             for(var i = 0; i < rows; i++) {
                 for(var j = 0; j < columns; j++) {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    const sx = tileMarginH + (j * (tileWidth + tilePaddingH)),
-                          sy = tileMarginV + (i * (tileHeight + tilePaddingV)),
+                    const sx = tileMarginLeft + (j * (tileWidth + tilePaddingH)),
+                          sy = tileMarginTop + (i * (tileHeight + tilePaddingV)),
                           sw = tileWidth,
                           sh = tileHeight,
                           dx = 0,
@@ -241,7 +252,17 @@ function buildTileset() {
 
         const newTilesetName = String(uploadName.value),
               newTilesetFile = uploadTileset.files[0],
-              newTilesetTitle = newTilesetName + "<i class='fas fa-caret-right fa-lg arrow'></i>";
+              newTilesetTitle = newTilesetName + "<i class='fas fa-caret-right fa-lg arrow'></i>",
+              tileDimensions = {
+                tileWidth: Number(uploadTileWidth.value),
+                tileHeight: Number(uploadTileHeight.value),
+                tilePaddingH: Number(uploadPaddingH.value),
+                tilePaddingV: Number(uploadPaddingV.value),
+                tileMarginLeft: Number(uploadMarginLeft.value),
+                tileMarginRight: Number(uploadMarginRight.value),
+                tileMarginTop: Number(uploadMarginTop.value),
+                tileMarginBot: Number(uploadMarginBot.value)
+              };
 
         // create tileset wrapper div and label
         const wrapper = document.createElement('div'),
@@ -251,7 +272,7 @@ function buildTileset() {
         wrapper.classList.add('tile-panel-window-content');
         tilesetsContainer.appendChild(wrapper);
 
-        label.innerHTML = newTilesetName;
+        label.innerHTML = newTilesetName + '<i class="fas fa-cog"></i>';
         label.classList.add('menu-item');
         tileMenu.appendChild(label);
 
@@ -260,28 +281,7 @@ function buildTileset() {
         tilesetName.innerHTML = tilesetTitle;
         tileMenu.setAttribute('hidden', true);
 
-        // add event listener for switching to this tileset from the menu
-        label.addEventListener('click', function() {
-
-            // hide all tileset panes
-            tilesets.forEach(function(tileset) {
-                tileset.wrapper.setAttribute('hidden', true);
-            });
-            wrapper.removeAttribute('hidden');
-            tileMenu.setAttribute('hidden', true);
-
-            tilesetTitle = newTilesetTitle;
-            tilesetName.innerHTML = newTilesetTitle;
-
-            if (wrapper.scrollHeight > wrapper.clientHeight  || wrapper.scrollWidth > wrapper.clientWidth) {
-                wrapper.classList.add('tile-overflow');
-            } else {
-                wrapper.classList.remove('tile-overflow');
-            }
-            
-        });
-
-        const newTileset = new Tileset(newTilesetName, wrapper);
+        const newTileset = new Tileset(newTilesetFile, newTilesetName, tileDimensions, wrapper);
         tilesets.push(newTileset);
 
         populateTileset(newTilesetFile, newTileset);
@@ -295,34 +295,30 @@ function buildTileset() {
                 }
             });
         };
-        
-        // let newTileset = document.createElement('div');
-        // newTileset.id = String(uploadName.value) + "-ts";
-        // newTileset.classList.add('tile-panel-window-content');
-        // tilesetsContainer.appendChild(newTileset);
 
-        // let newTilesetLabel = document.createElement('label');
-        // newTilesetLabel.classList.add('menu-item');
-        // newTilesetLabel.innerHTML = String(uploadName.value);
-        // tileMenu.appendChild(newTilesetLabel);
+        // add event listener for switching to this tileset from the menu
+        label.addEventListener('click', function() {
 
-        // tilesetName.innerHTML = uploadName.value + "<i class='fas fa-caret-right fa-lg arrow'></i>";
-        // tilesetTitle = tilesetName.innerHTML;
+            if (event.target.classList.contains('fa-cog')) {
+                console.log(newTileset);
+            } else {
+                // hide all tileset panes
+                tilesets.forEach(function(tileset) {
+                    tileset.wrapper.setAttribute('hidden', true);
+                });
+                wrapper.removeAttribute('hidden');
+                tileMenu.setAttribute('hidden', true);
 
-        // tileMenu.setAttribute('hidden', true);
+                tilesetTitle = newTilesetTitle;
+                tilesetName.innerHTML = newTilesetTitle;
 
-        // newTilesetLabel.addEventListener('click', function(){
-        //     tilesets.forEach(function(tileset){
-        //         tileset.setAttribute('hidden', true);
-        //     });
-        //     newTileset.removeAttribute('hidden');
-        //     tileMenu.setAttribute('hidden', true);
-        //     tilesetName.innerHTML = String(newTileset.id.slice(0, (newTileset.id.length - 3))) + "<i class='fas fa-caret-right fa-lg arrow'></i>"
-        //     tilesetTitle = tilesetName.innerHTML;
-        // });
-
-        // tilesets.push(newTileset);
-        // populateTileset(uploadTileset.files[0], newTileset);
+                if (wrapper.scrollHeight > wrapper.clientHeight  || wrapper.scrollWidth > wrapper.clientWidth) {
+                    wrapper.classList.add('tile-overflow');
+                } else {
+                    wrapper.classList.remove('tile-overflow');
+                }
+            }
+        });
     }
 }
 

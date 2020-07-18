@@ -298,17 +298,29 @@ body {
 .menu-item {
     display: block;
     height: 30px;
-    padding: 0 10px;
+    padding: 0 30px 0 10px;
     color: rgb(225,225,225);
     line-height: 30px;
     cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    position: relative;
 }
 
 .menu-item:hover {
     background-color: rgb(50,50,50);
+}
+
+.fa-cog {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    color: rgb(25,25,25);
+}
+
+.fa-cog:hover {
+    color: rgb(225,225,225);
 }
 
 /* Minimap Tool */
@@ -347,7 +359,7 @@ body {
 
 #upload-form {
     position: absolute;
-    height: 545px;
+    height: 605px;
     width: 300px;
     top: calc(50% - 282.5px);
     left: calc(50% - 150px);
