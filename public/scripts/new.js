@@ -14,6 +14,7 @@ var tilePanelWindow = document.querySelector('#tile-panel-window');
 var tilesetsContainer = document.querySelector('#tilesets-container');
 var tilesets = [];
 
+var formTitle = document.querySelector('#form-title');
 var uploadTileset = document.querySelector('#upload-tileset');
 var uploadForm = document.querySelector('#upload-form');
 var uploadFormWindow = document.querySelector('#upload-form-window');
@@ -128,35 +129,57 @@ function validFileType(file) {
     }
   
     return false;
-  }
+}
 
-uploadTileset.addEventListener('change', previewUpload);
-function previewUpload() {
+uploadTileset.addEventListener('change', function() {
+    formTitle.innerHTML = "Upload Tileset";
+    numberInputs.forEach(function(numberInput){
+        numberInput.value = "";
+    });
+    previewUpload();
+});
+
+function previewUpload(image) {
     while(uploadFormWindow.firstChild) {
         uploadFormWindow.removeChild(uploadFormWindow.firstChild);
     }
-    var tileset = uploadTileset.files[0];
-    if (validFileType(tileset)){
 
+    // edit tileset //
+    if (image !== undefined) {
+        var tileset = image.file;
         uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
-        uploadName.value = tileset.name;
+        uploadName.value = image.name,
+        uploadTileWidth.value = image.tileDimensions.tileWidth,
+        uploadTileHeight.value = image.tileDimensions.tileHeight,
+        uploadPaddingH.value = image.tileDimensions.tilePaddingH,
+        uploadPaddingV.value = image.tileDimensions.tilePaddingV,
+        uploadMarginLeft.value = image.tileDimensions.tileMarginLeft,
+        uploadMarginRight.value = image.tileDimensions.tileMarginRight,
+        uploadMarginTop.value = image.tileDimensions.tileMarginTop,
+        uploadMarginBot.value = image.tileDimensions.tileMarginBot;
 
-        // display upload dimensions
-        const uploadDimensions = new Image();
-        uploadDimensions.src = window.URL.createObjectURL(tileset);
-        uploadDimensions.onload = function(){
-            var dimensions = document.createElement('span');
-            dimensions.innerHTML = String(uploadDimensions.width + " x " + uploadDimensions.height);
-            dimensions.classList.add('dimensions');
-            uploadFormWindow.appendChild(dimensions);
-        }
-
-        uploadForm.removeAttribute('hidden');
-
+    // upload tileset //
     } else {
-        alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.")
+        var tileset = uploadTileset.files[0];
+        if (validFileType(tileset)) {
+            uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
+            uploadName.value = tileset.name;
+        } else {
+            alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.");
+        }
     }
-    
+
+    // display image dimensions //
+    const uploadDimensions = new Image();
+    uploadDimensions.src = window.URL.createObjectURL(tileset);
+    uploadDimensions.onload = function() {
+        var dimensions = document.createElement('span');
+        dimensions.innerHTML = String(uploadDimensions.width + " x " + uploadDimensions.height);
+        dimensions.classList.add('dimensions');
+        uploadFormWindow.appendChild(dimensions);
+    }
+
+    uploadForm.removeAttribute('hidden');
 }
 
 uploadForm.addEventListener('click', closeForm);
@@ -215,9 +238,6 @@ function populateTileset(file, newTileset) {
 
             var columns = (((tileset.width - (tileMarginLeft + tileMarginRight)) + tilePaddingH) / (tileWidth + tilePaddingH));
             var rows = (((tileset.height - (tileMarginTop + tileMarginBot)) + tilePaddingV) / (tileHeight + tilePaddingV));
-
-            // var columns = (((tileset.width - (tileMarginH * 2)) + tilePaddingH) / (tileWidth + tilePaddingH));
-            // var rows = (((tileset.height - (tileMarginV * 2)) + tilePaddingV) / (tileHeight + tilePaddingV));
 
             for(var i = 0; i < rows; i++) {
                 for(var j = 0; j < columns; j++) {
@@ -300,7 +320,8 @@ function buildTileset() {
         label.addEventListener('click', function() {
 
             if (event.target.classList.contains('fa-cog')) {
-                console.log(newTileset);
+                formTitle.innerHTML = "Edit Tileset"
+                previewUpload(newTileset);
             } else {
                 // hide all tileset panes
                 tilesets.forEach(function(tileset) {

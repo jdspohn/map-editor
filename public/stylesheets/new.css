@@ -359,7 +359,7 @@ body {
 
 #upload-form {
     position: absolute;
-    height: 605px;
+    height: 650px;
     width: 300px;
     top: calc(50% - 282.5px);
     left: calc(50% - 150px);
@@ -448,6 +448,10 @@ body {
     /* box-shadow: inset 0 0 0 2px black; */
 }
 
+#upload-form-options > #upload-margin-top {
+    margin-right: 10px;
+}
+
 /* #upload-form-options > input:hover {
     box-shadow: inset 0 0 0 2px skyblue;
 } */
@@ -468,6 +472,17 @@ body {
     text-align: center;
     line-height: 50px;
     margin-top: 5px;
+}
+
+#upload-form-options > #upload-form-delete {
+    width: 100%;
+    background-color: rgb(155, 32, 32);
+    margin-bottom: 10px;
+}
+
+#upload-form-options > #upload-form-delete:hover {
+    background-color: rgb(216, 48, 48);
+    cursor: pointer;
 }
 
 #upload-form-options > #upload-form-accept {
