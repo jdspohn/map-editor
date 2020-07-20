@@ -27,9 +27,12 @@ var uploadMarginLeft = document.querySelector('#upload-margin-left');
 var uploadMarginRight = document.querySelector('#upload-margin-right');
 var uploadMarginTop = document.querySelector('#upload-margin-top');
 var uploadMarginBot = document.querySelector('#upload-margin-bot');
+var uploadFormDelete = document.querySelector('#upload-form-delete');
 var uploadFormAccept = document.querySelector('#upload-form-accept');
 var numberInputs = document.querySelectorAll('.number-input');
 var uploadInputs = document.querySelectorAll('#upload-form-options input');
+var collapseButton = document.querySelectorAll('.collapse-button');
+var collapsible = document.querySelectorAll('.collapsible');
 
 var toolName = document.querySelector('#tool-name');
 var toolPanelTop = document.querySelector('#tool-panel-top');
@@ -136,6 +139,7 @@ uploadTileset.addEventListener('change', function() {
     numberInputs.forEach(function(numberInput){
         numberInput.value = "";
     });
+    uploadFormDelete.classList.add('hidden');
     previewUpload();
 });
 
@@ -179,6 +183,17 @@ function previewUpload(image) {
         uploadFormWindow.appendChild(dimensions);
     }
 
+    collapsible.forEach(function(div){
+        let hasValue = false;
+        [...div.children].forEach(function(child) {
+            if (~~child.value !== 0) {
+                hasValue = true;
+                console.log(child.value);
+            }
+        });
+        div.toggleAttribute('hidden', !hasValue);
+    });
+    
     uploadForm.removeAttribute('hidden');
 }
 
@@ -206,15 +221,27 @@ function verifyInput() {
     
     numberInputs.forEach(function(numberInput){
         let NiV = numberInput.value;
-        if (isNaN(NiV) || NiV == "") {
+        if (isNaN(NiV)) {
             numberInput.classList.add('invalid');
             valid = false;
+        } else if (NiV == "" && numberInput.parentNode.id == 'tile-dimensions-input') {
+            numberInput.classList.add('invalid');
+            valid = false;
+        } else if (NiV == "" && numberInput.parentNode.id !== 'tile-dimensions-input') {
+            this.value = 0;
+            numberInput.classList.remove('invalid');
         } else {
             numberInput.classList.remove('invalid');
         }
     });
     return valid;
 }
+
+collapseButton.forEach(function(button){
+    button.addEventListener('mousedown', function(){
+        button.parentElement.nextElementSibling.toggleAttribute('hidden');
+    })
+})
 
 // --------Tileset Building-------- //
 
@@ -320,7 +347,8 @@ function buildTileset() {
         label.addEventListener('click', function() {
 
             if (event.target.classList.contains('fa-cog')) {
-                formTitle.innerHTML = "Edit Tileset"
+                formTitle.innerHTML = "Edit Tileset";
+                uploadFormDelete.classList.remove('hidden');
                 previewUpload(newTileset);
             } else {
                 // hide all tileset panes
