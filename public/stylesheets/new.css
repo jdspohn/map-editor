@@ -200,6 +200,7 @@ body {
     image-rendering: crisp-edges;
     /* background-color: rgb(25, 25, 25); */
 }
+
 .tile-panel-window-content.tile-overflow > .tile {
     margin: 4px 1.5px;
 }
@@ -231,6 +232,7 @@ body {
     left: 0px;
     background-color: rgb(25,25,25);
     z-index: 1;
+    overflow-y: auto;
 }
 
 /* ---------Tool Panel------- */
