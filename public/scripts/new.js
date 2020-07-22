@@ -102,9 +102,10 @@ buttons.forEach(function(button) {
 
 // --------Tile Panel--------- //
 
+let activeTileset;
 let tilesetTitle = tilesetName.innerHTML;
 tilePanelTop.addEventListener('click', function() {
-    if(tilesetsContainer.firstChild){
+    if(activeTileset !== undefined){
         if (tileMenu.hasAttribute('hidden')) {
             tilesetName.innerHTML = "Tile Menu<i class='fas fa-caret-right fa-lg arrow'></i>";
             tileMenu.removeAttribute('hidden');
@@ -147,6 +148,10 @@ function previewUpload(image) {
     while(uploadFormWindow.firstChild) {
         uploadFormWindow.removeChild(uploadFormWindow.firstChild);
     }
+
+    uploadInputs.forEach(function(input) {
+        input.classList.remove('invalid');
+    });
 
     // edit tileset //
     if (image !== undefined) {
@@ -330,6 +335,7 @@ function buildTileset() {
 
         const newTileset = new Tileset(newTilesetFile, newTilesetName, tileDimensions, wrapper);
         tilesets.push(newTileset);
+        activeTileset = newTileset;
 
         populateTileset(newTilesetFile, newTileset);
        
@@ -343,6 +349,7 @@ function buildTileset() {
             });
         };
 
+
         // add event listener for switching to this tileset from the menu
         label.addEventListener('click', function() {
 
@@ -350,16 +357,31 @@ function buildTileset() {
                 formTitle.innerHTML = "Edit Tileset";
                 uploadFormDelete.classList.remove('hidden');
                 previewUpload(newTileset);
+
+                uploadFormDelete.addEventListener('click', function() {
+                    if (newTileset == activeTileset) {
+                        tilesetName.innerHTML = "Tile Menu<i class='fas fa-caret-right fa-lg arrow'></i>";
+                        tileMenu.removeAttribute('hidden');
+                        activeTileset = undefined;
+                    }
+                    tilesets.splice(tilesets.indexOf(newTileset), 1);
+                    label.parentNode.removeChild(label);
+                    wrapper.parentNode.removeChild(wrapper);
+                    uploadForm.setAttribute('hidden', true);
+                 });
+
             } else {
                 // hide all tileset panes
                 tilesets.forEach(function(tileset) {
                     tileset.wrapper.setAttribute('hidden', true);
                 });
-                wrapper.removeAttribute('hidden');
+
+                activeTileset = newTileset;
+                activeTileset.wrapper.removeAttribute('hidden');
                 tileMenu.setAttribute('hidden', true);
 
-                tilesetTitle = newTilesetTitle;
-                tilesetName.innerHTML = newTilesetTitle;
+                tilesetTitle = activeTileset.name + "<i class='fas fa-caret-right fa-lg arrow'></i>";
+                tilesetName.innerHTML = tilesetTitle;
 
                 if (wrapper.scrollHeight > wrapper.clientHeight  || wrapper.scrollWidth > wrapper.clientWidth) {
                     wrapper.classList.add('tile-overflow');
@@ -368,6 +390,8 @@ function buildTileset() {
                 }
             }
         });
+        
+        
     }
 }
 
