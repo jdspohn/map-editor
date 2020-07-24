@@ -458,6 +458,14 @@ function showForm(image) {
     form.removeAttribute('hidden');
 }
 
+// CLOSE FORM //
+function closeForm() {
+    if(event.target.classList.contains('close-form') || event.target.parentNode.classList.contains('close-form')) {
+        form.setAttribute('hidden', true);
+    }
+}
+form.addEventListener('click', closeForm);
+
 // ADD TILESET //
 function addTileset() {
 
