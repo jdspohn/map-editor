@@ -1,64 +1,326 @@
-var html = document.querySelector('html');
-var panelTop = document.querySelector('#panel-top');
-var file = document.querySelector('#file');
-var fileMenu = document.querySelector('#file-menu');
-var view = document.querySelector('#view');
-var viewMenu = document.querySelector('#view-menu');
+// var html = document.querySelector('html');
+// var panelTop = document.querySelector('#panel-top');
+// var file = document.querySelector('#file');
+// var fileMenu = document.querySelector('#file-menu');
+// var view = document.querySelector('#view');
+// var viewMenu = document.querySelector('#view-menu');
 
-var buttons = document.querySelectorAll('.button');
+// var instruments = document.querySelectorAll('.instrument');
 
-var tilesetName = document.querySelector('#tileset-name');
-var tilePanelTop = document.querySelector('#tile-panel-top');
-var tileMenu = document.querySelector('#tile-menu');
-var tilePanelWindow = document.querySelector('#tile-panel-window');
-var tilesetsContainer = document.querySelector('#tilesets-container');
-var tilesets = [];
+// const tilesetName = document.querySelector('#tileset-name');
+// var tilePanelTop = document.querySelector('#tile-panel-top');
+// var tileMenu = document.querySelector('#tile-menu');
+// var tilePanelWindow = document.querySelector('#tile-panel-window');
+// var tilesetsContainer = document.querySelector('#tilesets-container');
+// var tilesets = [];
 
-var formTitle = document.querySelector('#form-title');
-var uploadTileset = document.querySelector('#upload-tileset');
-var uploadForm = document.querySelector('#upload-form');
-var uploadFormWindow = document.querySelector('#upload-form-window');
-var uploadName = document.querySelector('#upload-name');
-var uploadTileWidth = document.querySelector('#upload-tile-width');
-var uploadTileHeight = document.querySelector('#upload-tile-height');
-var uploadPaddingH = document.querySelector('#upload-padding-h');
-var uploadPaddingV = document.querySelector('#upload-padding-v');
-var uploadMarginLeft = document.querySelector('#upload-margin-left');
-var uploadMarginRight = document.querySelector('#upload-margin-right');
-var uploadMarginTop = document.querySelector('#upload-margin-top');
-var uploadMarginBot = document.querySelector('#upload-margin-bot');
-var uploadFormDelete = document.querySelector('#upload-form-delete');
-var uploadFormAccept = document.querySelector('#upload-form-accept');
-var numberInputs = document.querySelectorAll('.number-input');
-var uploadInputs = document.querySelectorAll('#upload-form-options input');
-var collapseButton = document.querySelectorAll('.collapse-button');
-var collapsible = document.querySelectorAll('.collapsible');
+// var formTitle = document.querySelector('#form-title');
+// var uploadTileset = document.querySelector('#upload-tileset');
+// var uploadForm = document.querySelector('#upload-form');
+// var uploadFormWindow = document.querySelector('#upload-form-window');
+// var uploadName = document.querySelector('#upload-name');
+// var uploadTileWidth = document.querySelector('#upload-tile-width');
+// var uploadTileHeight = document.querySelector('#upload-tile-height');
+// var uploadPaddingH = document.querySelector('#upload-padding-h');
+// var uploadPaddingV = document.querySelector('#upload-padding-v');
+// var uploadMarginLeft = document.querySelector('#upload-margin-left');
+// var uploadMarginRight = document.querySelector('#upload-margin-right');
+// var uploadMarginTop = document.querySelector('#upload-margin-top');
+// var uploadMarginBot = document.querySelector('#upload-margin-bot');
+// var uploadFormDelete = document.querySelector('#upload-form-delete');
+// var uploadFormAccept = document.querySelector('#upload-form-accept');
+// var numberInputs = document.querySelectorAll('.number-input');
+// var uploadInputs = document.querySelectorAll('#upload-form-options input');
+// var collapseButton = document.querySelectorAll('.collapse-button');
+// var collapsible = document.querySelectorAll('.collapsible');
 
-var toolName = document.querySelector('#tool-name');
-var toolPanelTop = document.querySelector('#tool-panel-top');
-var toolMenu = document.querySelector('#tool-menu');
-var toolLabels = document.querySelectorAll('.tool-label');
+// var toolName = document.querySelector('#tool-name');
+// var toolPanelTop = document.querySelector('#tool-panel-top');
+// var toolMenu = document.querySelector('#tool-menu');
+// var toolLabels = document.querySelectorAll('.tool-label');
 
-var tools = document.querySelectorAll('.tool');
-var minimap = document.querySelector('#minimap');
-var layers = document.querySelector('#layers');
-var animation = document.querySelector('#animation');
+// var tools = document.querySelectorAll('.tool');
+// var minimap = document.querySelector('#minimap');
+// var layers = document.querySelector('#layers');
+// var animation = document.querySelector('#animation');
 
-// -------File, View------ //
+// // -------File, View------ //
 
-function closeMenu(event){
+// function closeMenu(event){
+//     console.log(event.target);
+//     if(event.target.id != 'file' && event.target.parentNode.id != 'file-menu'){
+//         fileMenu.setAttribute('hidden', true);
+//     }
+//     if(event.target.id != 'view' && event.target.parentNode.id != 'view-menu'){
+//         viewMenu.setAttribute('hidden', true);
+//     }
+// }
+
+// html.addEventListener('mousedown', closeMenu);
+
+// panelTop.addEventListener('mouseover', function(event) {
+//     if (fileMenu.hasAttribute('hidden') == false) {
+//         if (event.target.id == 'view') {
+//             fileMenu.setAttribute('hidden', true);
+//             viewMenu.toggleAttribute('hidden');
+//         }
+//     }
+//     if (viewMenu.hasAttribute('hidden') == false) {
+//         if (event.target.id == 'file') {
+//             viewMenu.setAttribute('hidden', true);
+//             fileMenu.toggleAttribute('hidden');
+//         }
+//     }
+// })
+
+// file.addEventListener('mousedown', function(event) {
+//     viewMenu.setAttribute('hidden', true);
+//     fileMenu.toggleAttribute('hidden');
+// });
+
+// view.addEventListener('mousedown', function(event) {
+//     fileMenu.setAttribute('hidden', true);
+//     viewMenu.toggleAttribute('hidden');
+// });
+
+// // --------Instrument Buttons-------- //
+
+// instruments.forEach(function(button) {
+//     button.addEventListener('mousedown', function(){
+//         if (button.classList.contains('selected')) {
+//             button.classList.remove('selected');
+//         } else {
+//             instruments.forEach(function(button) {
+//                 button.classList.remove('selected');
+//             });
+//             button.classList.add('selected');
+//         }
+//     });
+// });
+
+// // --------Tile Panel--------- //
+
+// let activeTileset;
+// let activeTitle = tilesetName.innerHTML;
+// function toggleTileMenu() {
+//     if (activeTileset !== undefined) {
+//         if (tileMenu.hasAttribute('hidden')) {
+//             tilesetName.innerHTML = "Tile Menu<i class='fas fa-caret-right fa-lg arrow'></i>";
+//             tileMenu.removeAttribute('hidden');
+//         } else {
+//             tilesetName.innerHTML = activeTitle;
+//             tileMenu.setAttribute('hidden', true);
+//         }
+//     }
+// }
+// tilePanelTop.addEventListener('click', toggleTileMenu);
+
+// // ---------Tileset Upload Form--------- //
+
+// var fileTypes = [
+//     'image/jpg',
+//     'image/jpeg',
+//     'image/png',
+//     'image/gif'
+//   ]
+  
+// function validFileType(file) {
+//     for(var i = 0; i < fileTypes.length; i++) {
+//       if(file.type === fileTypes[i]) {
+//         return true;
+//       }
+//     }
+  
+//     return false;
+// }
+
+// uploadTileset.addEventListener('change', function() {
+//     formTitle.innerHTML = "Upload Tileset";
+//     numberInputs.forEach(function(numberInput){
+//         numberInput.value = "";
+//     });
+//     uploadFormDelete.classList.add('hidden');
+//     previewUpload();
+// });
+
+// function previewUpload(image) {
+//     while(uploadFormWindow.firstChild) {
+//         uploadFormWindow.removeChild(uploadFormWindow.firstChild);
+//     }
+
+//     uploadInputs.forEach(function(input) {
+//         input.classList.remove('invalid');
+//     });
+
+//     // edit tileset //
+//     if (image !== undefined) {
+//         var tileset = image.file;
+//         uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
+//         uploadName.value = image.name,
+//         uploadTileWidth.value = image.tileDimensions.tileWidth,
+//         uploadTileHeight.value = image.tileDimensions.tileHeight,
+//         uploadPaddingH.value = image.tileDimensions.tilePaddingH,
+//         uploadPaddingV.value = image.tileDimensions.tilePaddingV,
+//         uploadMarginLeft.value = image.tileDimensions.tileMarginLeft,
+//         uploadMarginRight.value = image.tileDimensions.tileMarginRight,
+//         uploadMarginTop.value = image.tileDimensions.tileMarginTop,
+//         uploadMarginBot.value = image.tileDimensions.tileMarginBot;
+
+//     // upload tileset //
+//     } else {
+//         var tileset = uploadTileset.files[0];
+//         if (validFileType(tileset)) {
+//             uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
+//             uploadName.value = tileset.name;
+//         } else {
+//             alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.");
+//         }
+//     }
+
+//     // display image dimensions //
+//     const uploadDimensions = new Image();
+//     uploadDimensions.src = window.URL.createObjectURL(tileset);
+//     uploadDimensions.onload = function() {
+//         var dimensions = document.createElement('span');
+//         dimensions.innerHTML = String(uploadDimensions.width + " x " + uploadDimensions.height);
+//         dimensions.classList.add('dimensions');
+//         uploadFormWindow.appendChild(dimensions);
+//     }
+
+//     collapsible.forEach(function(div){
+//         let hasValue = false;
+//         [...div.children].forEach(function(child) {
+//             if (~~child.value !== 0) {
+//                 hasValue = true;
+//                 console.log(child.value);
+//             }
+//         });
+//         div.toggleAttribute('hidden', !hasValue);
+//     });
+    
+//     uploadForm.removeAttribute('hidden');
+// }
+
+// uploadForm.addEventListener('click', closeForm);
+// function closeForm() {
+//     if(event.target.classList.contains('close-form') || event.target.parentNode.classList.contains('close-form')) {
+//         uploadForm.setAttribute('hidden', true);
+//     }
+// }
+
+// uploadFormAccept.addEventListener('click', buildTileset);
+
+// function verifyInput() {
+//     let valid = true;
+//     uploadInputs.forEach(function(input) {
+//         input.classList.remove('invalid');
+//     });
+    
+//     tilesets.forEach(function(tileset) {
+//         if (uploadName.value == tileset.name || uploadName.value == "" || uploadName.value == undefined){
+//             uploadName.classList.add('invalid');
+//             valid = false;
+//         }
+//     });
+    
+//     numberInputs.forEach(function(numberInput){
+//         let NiV = numberInput.value;
+//         if (isNaN(NiV)) {
+//             numberInput.classList.add('invalid');
+//             valid = false;
+//         } else if (NiV == "" && numberInput.parentNode.id == 'tile-dimensions-input') {
+//             numberInput.classList.add('invalid');
+//             valid = false;
+//         } else if (NiV == "" && numberInput.parentNode.id !== 'tile-dimensions-input') {
+//             this.value = 0;
+//             numberInput.classList.remove('invalid');
+//         } else {
+//             numberInput.classList.remove('invalid');
+//         }
+//     });
+//     return valid;
+// }
+
+// collapseButton.forEach(function(button){
+//     button.addEventListener('mousedown', function(){
+//         button.parentElement.nextElementSibling.toggleAttribute('hidden');
+//     })
+// })
+
+// ---------------- //
+// GLOBAL VARIABLES //
+// ---------------- //
+
+const html = document.querySelector('html');
+
+// Panel Top: File, View //
+const panelTop = document.querySelector('#panel-top'),
+      file = document.querySelector('#file'),
+      fileMenu = document.querySelector('#file-menu'),
+      view = document.querySelector('#view'),
+      viewMenu = document.querySelector('#view-menu');
+
+// Instruments //
+const instruments = document.querySelectorAll('.instrument');
+
+// Tile Panel //
+const tilePanelTop = document.querySelector('#tile-panel-top'),
+      tilesetName = document.querySelector('#tileset-name'),
+      tilePanelWindow = document.querySelector('#tile-panel-window'),
+      tileMenu = document.querySelector('#tile-menu'),
+      tilesetsContainer = document.querySelector('#tilesets-container'),
+      tilesets = [];
+
+// Tileset Upload Form //
+const uploadTileset = document.querySelector('#upload-tileset');
+
+const form = document.querySelector('#form'),
+      formTitle = document.querySelector('#form-title'),
+      formWindow = document.querySelector('#form-window'),
+      formInputs = document.querySelectorAll('#form-options input'),
+      numberInputs = document.querySelectorAll('.number-input'),
+      collapseButton = document.querySelectorAll('.collapse-button'),
+      collapsible = document.querySelectorAll('.collapsible'),
+      formAccept = document.querySelector('#form-accept'),
+      formDelete = document.querySelector('#form-delete');
+
+const formName = document.querySelector('#form-name'),
+      formTileWidth = document.querySelector('#form-tile-width'),
+      formTileHeight = document.querySelector('#form-tile-height'),
+      formPaddingH = document.querySelector('#form-padding-h'),
+      formPaddingV = document.querySelector('#form-padding-v'),
+      formMarginLeft = document.querySelector('#form-margin-left'),
+      formMarginRight = document.querySelector('#form-margin-right'),
+      formMarginTop = document.querySelector('#form-margin-top'),
+      formMarginBot = document.querySelector('#form-margin-bot');
+
+// Tool Panel //
+const toolPanelTop = document.querySelector('#tool-panel-top'),
+      toolName = document.querySelector('#tool-name'),
+      toolMenu = document.querySelector('#tool-menu'),
+      toolLabels = document.querySelectorAll('.tool-label');
+
+const tools = document.querySelectorAll('.tool'),
+      minimap = document.querySelector('#minimap'),
+      layers = document.querySelector('#layers'),
+      animation = document.querySelector('#animation');
+
+// --------------------- //
+// Panel Top: File, View //
+// --------------------- //
+
+// Close and Open Menus //
+function closeMenu(event) {
     console.log(event.target);
-    if(event.target.id != 'file' && event.target.parentNode.id != 'file-menu'){
+    if(event.target.id != 'file' && event.target.parentNode.id != 'file-menu') {
         fileMenu.setAttribute('hidden', true);
     }
-    if(event.target.id != 'view' && event.target.parentNode.id != 'view-menu'){
+    if(event.target.id != 'view' && event.target.parentNode.id != 'view-menu') {
         viewMenu.setAttribute('hidden', true);
     }
 }
 
-html.addEventListener('mousedown', function(event){
-    closeMenu(event);
-});
+html.addEventListener('mousedown', closeMenu);
 
 panelTop.addEventListener('mouseover', function(event) {
     if (fileMenu.hasAttribute('hidden') == false) {
@@ -75,24 +337,29 @@ panelTop.addEventListener('mouseover', function(event) {
     }
 })
 
+// FILE MENU //
 file.addEventListener('mousedown', function(event) {
     viewMenu.setAttribute('hidden', true);
     fileMenu.toggleAttribute('hidden');
 });
 
+// VIEW MENU //
 view.addEventListener('mousedown', function(event) {
     fileMenu.setAttribute('hidden', true);
     viewMenu.toggleAttribute('hidden');
 });
 
-// --------Tool Buttons-------- //
+// ----------- //
+// INSTRUMENTS //
+// ----------- //
 
-buttons.forEach(function(button) {
-    button.addEventListener('mousedown', function(){
+// Button Selection //
+instruments.forEach(function(button) {
+    button.addEventListener('mousedown', function() {
         if (button.classList.contains('selected')) {
             button.classList.remove('selected');
         } else {
-            buttons.forEach(function(button) {
+            instruments.forEach(function(button) {
                 button.classList.remove('selected');
             });
             button.classList.add('selected');
@@ -100,24 +367,33 @@ buttons.forEach(function(button) {
     });
 });
 
-// --------Tile Panel--------- //
+// ---------- //
+// TILE PANEL //
+// ---------- //
 
-let activeTileset;
-let tilesetTitle = tilesetName.innerHTML;
-tilePanelTop.addEventListener('click', function() {
-    if(activeTileset !== undefined){
+// Toggle Tile Menu //
+let activeTileset,
+    activeTitle = tilesetName.innerHTML;
+
+function toggleTileMenu() {
+    if (activeTileset !== undefined) {
         if (tileMenu.hasAttribute('hidden')) {
             tilesetName.innerHTML = "Tile Menu<i class='fas fa-caret-right fa-lg arrow'></i>";
             tileMenu.removeAttribute('hidden');
         } else {
-            tilesetName.innerHTML = tilesetTitle;
+            tilesetName.innerHTML = activeTitle;
             tileMenu.setAttribute('hidden', true);
         }
     }
-});
+}
 
-// ---------Tileset Upload Form--------- //
+tilePanelTop.addEventListener('click', toggleTileMenu);
 
+// ------------ //
+// TILESET FORM //
+// ------------ //
+
+// Image Upload Verification //
 var fileTypes = [
     'image/jpg',
     'image/jpeg',
@@ -135,118 +411,95 @@ function validFileType(file) {
     return false;
 }
 
-uploadTileset.addEventListener('change', function() {
-    formTitle.innerHTML = "Upload Tileset";
-    numberInputs.forEach(function(numberInput){
-        numberInput.value = "";
+// Form Input Verification //
+
+
+// Manually Collapse Padding and Margin Fields //
+collapseButton.forEach(function(button) {
+    button.addEventListener('mousedown', function() {
+        button.parentElement.nextElementSibling.toggleAttribute('hidden');
     });
-    uploadFormDelete.classList.add('hidden');
-    previewUpload();
 });
 
-function previewUpload(image) {
-    while(uploadFormWindow.firstChild) {
-        uploadFormWindow.removeChild(uploadFormWindow.firstChild);
+// CLEAR FORM //
+function clearForm() {
+    while(formWindow.firstChild) {
+        formWindow.removeChild(formWindow.firstChild);
     }
-
-    uploadInputs.forEach(function(input) {
+    formInputs.forEach(function(input) {
         input.classList.remove('invalid');
     });
+}
 
-    // edit tileset //
-    if (image !== undefined) {
-        var tileset = image.file;
-        uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
-        uploadName.value = image.name,
-        uploadTileWidth.value = image.tileDimensions.tileWidth,
-        uploadTileHeight.value = image.tileDimensions.tileHeight,
-        uploadPaddingH.value = image.tileDimensions.tilePaddingH,
-        uploadPaddingV.value = image.tileDimensions.tilePaddingV,
-        uploadMarginLeft.value = image.tileDimensions.tileMarginLeft,
-        uploadMarginRight.value = image.tileDimensions.tileMarginRight,
-        uploadMarginTop.value = image.tileDimensions.tileMarginTop,
-        uploadMarginBot.value = image.tileDimensions.tileMarginBot;
+// SHOW FORM //
+function showForm(image) {
 
-    // upload tileset //
-    } else {
-        var tileset = uploadTileset.files[0];
-        if (validFileType(tileset)) {
-            uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
-            uploadName.value = tileset.name;
-        } else {
-            alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.");
-        }
-    }
-
-    // display image dimensions //
-    const uploadDimensions = new Image();
-    uploadDimensions.src = window.URL.createObjectURL(tileset);
-    uploadDimensions.onload = function() {
-        var dimensions = document.createElement('span');
-        dimensions.innerHTML = String(uploadDimensions.width + " x " + uploadDimensions.height);
+    // Display Image Dimensions //
+    const imageDimensions = new Image();
+    imageDimensions.src = window.URL.createObjectURL(image);
+    imageDimensions.onload = function() {
+        const dimensions = document.createElement('span');
+        dimensions.innerHTML = String(imageDimensions.width + " x " + imageDimensions.height);
         dimensions.classList.add('dimensions');
-        uploadFormWindow.appendChild(dimensions);
+        formWindow.appendChild(dimensions);
     }
 
+    // Collapse Padding or Margin Fields if All Values are Zero //
     collapsible.forEach(function(div){
         let hasValue = false;
         [...div.children].forEach(function(child) {
             if (~~child.value !== 0) {
                 hasValue = true;
-                console.log(child.value);
             }
         });
         div.toggleAttribute('hidden', !hasValue);
     });
-    
-    uploadForm.removeAttribute('hidden');
+
+    form.removeAttribute('hidden');
 }
 
-uploadForm.addEventListener('click', closeForm);
-function closeForm() {
-    if(event.target.classList.contains('close-form') || event.target.parentNode.classList.contains('close-form')) {
-        uploadForm.setAttribute('hidden', true);
-    }
-}
+// ADD TILESET //
+function addTileset() {
 
-uploadFormAccept.addEventListener('click', buildTileset);
-
-function verifyInput() {
-    let valid = true;
-    uploadInputs.forEach(function(input) {
-        input.classList.remove('invalid');
-    });
-    
-    tilesets.forEach(function(tileset) {
-        if (uploadName.value == tileset.name || uploadName.value == "" || uploadName.value == undefined){
-            uploadName.classList.add('invalid');
-            valid = false;
-        }
-    });
-    
+    clearForm();
     numberInputs.forEach(function(numberInput){
-        let NiV = numberInput.value;
-        if (isNaN(NiV)) {
-            numberInput.classList.add('invalid');
-            valid = false;
-        } else if (NiV == "" && numberInput.parentNode.id == 'tile-dimensions-input') {
-            numberInput.classList.add('invalid');
-            valid = false;
-        } else if (NiV == "" && numberInput.parentNode.id !== 'tile-dimensions-input') {
-            this.value = 0;
-            numberInput.classList.remove('invalid');
-        } else {
-            numberInput.classList.remove('invalid');
-        }
+        numberInput.value = "";
     });
-    return valid;
+
+    formTitle.innerHTML = "Upload Tileset";
+
+    let image = uploadTileset.files[0];
+        if (validFileType(image)) {
+            formWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(image) + "')";
+            formName.value = image.name;
+        } else {
+            alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.");
+        }
+
+    formDelete.classList.add('hidden');
+    showForm(image);
 }
 
-collapseButton.forEach(function(button){
-    button.addEventListener('mousedown', function(){
-        button.parentElement.nextElementSibling.toggleAttribute('hidden');
-    })
-})
+uploadTileset.addEventListener('change', addTileset);
+
+// EDIT TILESET //
+function editTileset(tileset) {
+
+    clearForm();
+    let image = tileset.file;
+        formWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(image) + "')";
+        formName.value = tileset.name,
+        formTileWidth.value = tileset.tileDimensions.tileWidth,
+        formTileHeight.value = tileset.tileDimensions.tileHeight,
+        formPaddingH.value = tileset.tileDimensions.tilePaddingH,
+        formPaddingV.value = tileset.tileDimensions.tilePaddingV,
+        formMarginLeft.value = tileset.tileDimensions.tileMarginLeft,
+        formMarginRight.value = tileset.tileDimensions.tileMarginRight,
+        formMarginTop.value = tileset.tileDimensions.tileMarginTop,
+        formMarginBot.value = tileset.tileDimensions.tileMarginBot;
+    formDelete.classList.remove('hidden');
+    showForm(image);
+}
 
 // --------Tileset Building-------- //
 
@@ -329,8 +582,8 @@ function buildTileset() {
         tileMenu.appendChild(label);
 
         // updating tileset pane with this tile information
-        tilesetTitle = newTilesetTitle;
-        tilesetName.innerHTML = tilesetTitle;
+        activeTitle = newTilesetTitle;
+        tilesetName.innerHTML = activeTitle;
         tileMenu.setAttribute('hidden', true);
 
         const newTileset = new Tileset(newTilesetFile, newTilesetName, tileDimensions, wrapper);
@@ -380,8 +633,8 @@ function buildTileset() {
                 activeTileset.wrapper.removeAttribute('hidden');
                 tileMenu.setAttribute('hidden', true);
 
-                tilesetTitle = activeTileset.name + "<i class='fas fa-caret-right fa-lg arrow'></i>";
-                tilesetName.innerHTML = tilesetTitle;
+                activeTitle = activeTileset.name + "<i class='fas fa-caret-right fa-lg arrow'></i>";
+                tilesetName.innerHTML = activeTitle;
 
                 if (wrapper.scrollHeight > wrapper.clientHeight  || wrapper.scrollWidth > wrapper.clientWidth) {
                     wrapper.classList.add('tile-overflow');

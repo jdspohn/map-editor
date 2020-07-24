@@ -8,7 +8,10 @@
     <title>New - Map Editor</title>
 </head>
 <body>
+
     <div id="panel">
+
+        <!-- Panel Top -->
         <div id="panel-top">
             <span id="file">File</span>
             <div id="file-menu" hidden>
@@ -22,12 +25,16 @@
                 <span id="view-backgrounds">Backgrounds</span>
             </div>
         </div>
+
+        <!-- Instruments -->
         <div id="instrument-buttons">
-            <div id="move" class="button"><i class="fas fa-arrows-alt"></i></div>
-            <div id="eraser" class="button"><i class="fas fa-eraser"></i></div>
-            <div id="dropper" class="button"><i class="fas fa-eye-dropper"></i></div>
-            <div id="zoom" class="button"><i class="fas fa-search"></i></div>
+            <div id="move" class="instrument"><i class="fas fa-arrows-alt"></i></div>
+            <div id="eraser" class="instrument"><i class="fas fa-eraser"></i></div>
+            <div id="dropper" class="instrument"><i class="fas fa-eye-dropper"></i></div>
+            <div id="zoom" class="instrument"><i class="fas fa-search"></i></div>
         </div>
+
+        <!-- Tile Panel -->
         <div id="tile-panel">
             <div id="tile-panel-top">
                 <span id="tileset-name">Tile Menu<i class="fas fa-caret-right fa-lg arrow"></i></span>
@@ -40,6 +47,8 @@
                 <div id="tilesets-container"></div>
             </div>
         </div>
+
+        <!-- Tool Panel -->
         <div id="tool-panel">
             <div id="tool-panel-top">
                 <span id="tool-name">Minimap<i class="fas fa-caret-right fa-lg arrow"></i></span>
@@ -56,32 +65,36 @@
             </div>
         </div>
     </div>
-    <div id="upload-form" hidden>
-        <div id="upload-form-top">
+
+    <!-- Upload / Edit Tileset Form -->
+    <div id="form" hidden>
+        <div id="form-top">
             <span id="form-title"></span>
             <div class="close-form"><i class="fas fa-times"></i></div>
         </div>
-        <div id="upload-form-window"></div>
-        <div id="upload-form-options">
-            <label for="upload-name">Tileset Name</label>
-            <input id="upload-name" type="text" placeholder="Tileset Name">
+        <div id="form-window"></div>
+        <div id="form-options">
+            <label for="form-name">Tileset Name</label>
+            <input id="form-name" type="text" placeholder="Tileset Name">
             <label>Tile Dimensions</label>
             <div id="tile-dimensions-input">
-            <input id="upload-tile-width" class="number-input" type="text" placeholder="Width"><input id="upload-tile-height" class="number-input" type="text" placeholder="Height">
+            <input id="form-tile-width" class="number-input" type="text" placeholder="Width"><input id="form-tile-height" class="number-input" type="text" placeholder="Height">
             </div>
             <label>Tile Padding<i class="fas fa-caret-down fa-lg arrow collapse-button"></i></label>
             <div id="tile-padding-input" class="collapsible">
-            <input id="upload-padding-h" class="number-input" type="text" placeholder="Horizontal"><input id="upload-padding-v" class="number-input" type="text" placeholder="Vertical">
+            <input id="form-padding-h" class="number-input" type="text" placeholder="Horizontal"><input id="form-padding-v" class="number-input" type="text" placeholder="Vertical">
             </div>
             <label>Tileset Margin<i class="fas fa-caret-down fa-lg arrow collapse-button"></i></label>
             <div id="tileset-margin-input" class="collapsible">
-            <input id="upload-margin-left" class="number-input" type="text" placeholder="Left"><input id="upload-margin-right" class="number-input" type="text" placeholder="Right">
-            <input id="upload-margin-top" class="number-input" type="text" placeholder="Top"><input id="upload-margin-bot" class="number-input" type="text" placeholder="Bottom">
+            <input id="form-margin-left" class="number-input" type="text" placeholder="Left"><input id="form-margin-right" class="number-input" type="text" placeholder="Right">
+            <input id="form-margin-top" class="number-input" type="text" placeholder="Top"><input id="form-margin-bot" class="number-input" type="text" placeholder="Bottom">
             </div>
-            <div id="upload-form-delete" class="form-button">DELETE TILESET</div>
-            <div id="upload-form-accept" class="form-button">ACCEPT</div><div id="upload-form-cancel" class="close-form form-button">CANCEL</div>         
+            <div id="form-delete" class="form-button">DELETE TILESET</div>
+            <div id="form-accept" class="form-button">ACCEPT</div><div id="form-cancel" class="close-form form-button">CANCEL</div>         
         </div>
+
     </div>
+
 </body>
 
 
