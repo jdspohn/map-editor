@@ -412,7 +412,50 @@ function validFileType(file) {
 }
 
 // Form Input Verification //
+function verifyInput(tileset) {
+    let valid = true;
 
+    if (formName.value == "" || formName.value == undefined) {
+        formName.classList.add('invalid');
+        valid = false;
+    } else {
+        formName.classList.remove('invalid');
+    }
+
+    tilesets.forEach(function(tileset) {
+        if (formName.value == tileset.name) {
+            formName.classList.add('invalid');
+            valid = false;
+        }
+    });
+
+    if (tileset) {
+        if (formName.value == tileset.name) {
+            formName.classList.remove('invalid');
+            valid = true;
+        }
+    }
+
+    // test these ^^ when edit button is working
+
+    numberInputs.forEach(function(numberInput) {
+        let NiV = numberInput.value;
+        if (isNaN(NiV)) {
+            numberInput.classList.add('invalid');
+            valid = false;
+        } else if (NiV == "" && numberInput.parentNode.id == 'tile-dimensions-input') {
+            numberInput.classList.add('invalid');
+            valid = false;
+        } else if (NiV == "" && numberInput.parentNode.id !== 'tile-dimensions-input') {
+            this.value = 0;
+            numberInput.classList.remove('invalid');
+        } else {
+            numberInput.classList.remove('invalid');
+        }
+    });
+    
+    return valid;
+}
 
 // Manually Collapse Padding and Margin Fields //
 collapseButton.forEach(function(button) {
@@ -468,31 +511,31 @@ form.addEventListener('click', closeForm);
 
 // ADD TILESET //
 function addTileset() {
-
-    clearForm();
-    numberInputs.forEach(function(numberInput){
-        numberInput.value = "";
-    });
-
-    formTitle.innerHTML = "Upload Tileset";
-
     let image = uploadTileset.files[0];
-        if (validFileType(image)) {
-            formWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(image) + "')";
-            formName.value = image.name;
-        } else {
-            alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.");
-        }
-
-    formDelete.classList.add('hidden');
-    showForm(image);
+    if (validFileType(image)) {
+        clearForm();
+        numberInputs.forEach(function(numberInput){
+            numberInput.value = "";
+        });
+        formTitle.innerHTML = "Upload Tileset";
+        formWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(image) + "')";
+        formName.value = image.name;
+        formDelete.classList.add('hidden');
+        showForm(image);
+        formAccept.addEventListener('click', function() {
+            verifyInput();
+        });
+    } else {
+        alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.");
+    }
 }
+
+// test opening an edit form and uploading an invalid file type to see if it resets the values in the form
 
 uploadTileset.addEventListener('change', addTileset);
 
 // EDIT TILESET //
 function editTileset(tileset) {
-
     clearForm();
     let image = tileset.file;
         formWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(image) + "')";
@@ -507,7 +550,12 @@ function editTileset(tileset) {
         formMarginBot.value = tileset.tileDimensions.tileMarginBot;
     formDelete.classList.remove('hidden');
     showForm(image);
+    formAccept.addEventListener('click', function() {
+        verifyInput(tileset);
+    });
 }
+
+// cog.addeventlistener('click', editTileset(tileset))
 
 // --------Tileset Building-------- //
 
