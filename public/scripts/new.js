@@ -464,16 +464,6 @@ collapseButton.forEach(function(button) {
     });
 });
 
-// CLEAR FORM //
-function clearForm() {
-    while(formWindow.firstChild) {
-        formWindow.removeChild(formWindow.firstChild);
-    }
-    formInputs.forEach(function(input) {
-        input.classList.remove('invalid');
-    });
-}
-
 // SHOW FORM //
 function showForm(image) {
 
@@ -503,31 +493,47 @@ function showForm(image) {
 
 // CLOSE FORM //
 function closeForm() {
-    if(event.target.classList.contains('close-form') || event.target.parentNode.classList.contains('close-form')) {
+    if (event.target.classList.contains('close-form') || event.target.parentNode.classList.contains('close-form')) {
         form.setAttribute('hidden', true);
     }
 }
 form.addEventListener('click', closeForm);
 
+// CLEAR FORM //
+function clearForm() {
+
+    // remove old image and dimension text overlay
+    while (formWindow.firstChild) {
+        formWindow.removeChild(formWindow.firstChild);
+    }
+
+    // remove red borders around input fields
+    formInputs.forEach(input => input.classList.remove('invalid'));
+    
+    // set input fields to blank
+    numberInputs.forEach(input => input.value = '');
+}
+
+let isEditing = false,
+    editingTileset;
+
 // ADD TILESET //
 function addTileset() {
-    let image = uploadTileset.files[0];
-    if (validFileType(image)) {
-        clearForm();
-        numberInputs.forEach(function(numberInput){
-            numberInput.value = "";
-        });
-        formTitle.innerHTML = "Upload Tileset";
-        formWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(image) + "')";
-        formName.value = image.name;
-        formDelete.classList.add('hidden');
-        showForm(image);
-        formAccept.addEventListener('click', function() {
-            verifyInput();
-        });
-    } else {
-        alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.");
+    const image = uploadTileset.files[0];
+    if (!validFileType(image)) {
+        return alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.");
     }
+
+    isEditing = false;
+
+    clearForm();
+    formTitle.innerHTML = "Upload Tileset";
+    formWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(image) + "')";
+    formDelete.classList.add('hidden');
+
+    formName.value = image.name;
+
+    showForm(image);
 }
 
 // test opening an edit form and uploading an invalid file type to see if it resets the values in the form
@@ -537,48 +543,84 @@ uploadTileset.addEventListener('change', addTileset);
 // EDIT TILESET //
 function editTileset(tileset) {
     clearForm();
-    let image = tileset.file;
-        formWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(image) + "')";
-        formName.value = tileset.name,
-        formTileWidth.value = tileset.tileDimensions.tileWidth,
-        formTileHeight.value = tileset.tileDimensions.tileHeight,
-        formPaddingH.value = tileset.tileDimensions.tilePaddingH,
-        formPaddingV.value = tileset.tileDimensions.tilePaddingV,
-        formMarginLeft.value = tileset.tileDimensions.tileMarginLeft,
-        formMarginRight.value = tileset.tileDimensions.tileMarginRight,
-        formMarginTop.value = tileset.tileDimensions.tileMarginTop,
-        formMarginBot.value = tileset.tileDimensions.tileMarginBot;
+    formTitle.innerHTML = "Edit Tileset";
+    formWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset.file) + "')";
     formDelete.classList.remove('hidden');
-    showForm(image);
-    formAccept.addEventListener('click', function() {
-        verifyInput(tileset);
-    });
+
+    isEditing = true;
+    editingTileset = tileset;
+
+    formName.value        = tileset.name;
+    formTileWidth.value   = tileset.tileDimensions.tileWidth;
+    formTileHeight.value  = tileset.tileDimensions.tileHeight;
+    formPaddingH.value    = tileset.tileDimensions.tilePaddingH;
+    formPaddingV.value    = tileset.tileDimensions.tilePaddingV;
+    formMarginLeft.value  = tileset.tileDimensions.tileMarginLeft;
+    formMarginRight.value = tileset.tileDimensions.tileMarginRight;
+    formMarginTop.value   = tileset.tileDimensions.tileMarginTop;
+    formMarginBot.value   = tileset.tileDimensions.tileMarginBot;
+
+    showForm(tileset.file);
 }
 
 // cog.addeventlistener('click', editTileset(tileset))
 
+formAccept.addEventListener('click', function() {
+    if (isEditing) {
+        if (verifyInput(editingTileset)) {
+            updateTileset(editingTileset);
+        }
+    } else {
+        if (verifyInput()) {
+            createTileset();
+        }
+    }
+});
+
+function createTileset() {
+    // todo
+}
+
+function updateTileset(tileset) {
+    tileset.name = formName.value;
+    tileset.tileDimensions.tileWidth = Number(formTileWidth.value);
+    tileset.tileDimensions.tileHeight = Number(formTileHeight.value);
+    tileset.tileDimensions.tilePaddingH = Number(formPaddingH.value);
+    tileset.tileDimensions.tilePaddingV = Number(formPaddingV.value);
+    tileset.tileDimensions.tileMarginLeft = Number(formMarginLeft.value);
+    tileset.tileDimensions.tileMarginRight = Number(formMarginRight.value);
+    tileset.tileDimensions.tileMarginTop = Number(formMarginTop.value);
+    tileset.tileDimensions.tileMarginBot = Number(formMarginBot.value);
+
+    populateTileset(tileset.file, tileset);
+    uploadForm.setAttribute('hidden', true);
+}
+
 // --------Tileset Building-------- //
 
-function populateTileset(file, newTileset) {
-    var tileWidth = Number(uploadTileWidth.value);
-    var tileHeight = Number(uploadTileHeight.value);
-    var tilePaddingH = Number(uploadPaddingH.value);
-    var tilePaddingV = Number(uploadPaddingV.value);
-    var tileMarginLeft = Number(uploadMarginLeft.value);
-    var tileMarginRight = Number(uploadMarginRight.value);
-    var tileMarginTop = Number(uploadMarginTop.value);
-    var tileMarginBot = Number(uploadMarginBot.value);
+function populateTileset(file, tileset) {
+    var tileWidth = tileset.tileDimensions.tileWidth;
+    var tileHeight = tileset.tileDimensions.tileHeight;
+    var tilePaddingH = tileset.tileDimensions.tilePaddingH;
+    var tilePaddingV = tileset.tileDimensions.tilePaddingV;
+    var tileMarginLeft = tileset.tileDimensions.tileMarginLeft; 
+    var tileMarginRight = tileset.tileDimensions.tileMarginRight;
+    var tileMarginTop = tileset.tileDimensions.tileMarginTop;
+    var tileMarginBot = tileset.tileDimensions.tileMarginBot;
 
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = tileWidth;
     canvas.height = tileHeight;
 
-    var tileset = new Image();
-        tileset.onload = function() {
+    // clear wrapper incase we're using new edited values
+    tileset.wrapper.innerHTML = '';
 
-            var columns = (((tileset.width - (tileMarginLeft + tileMarginRight)) + tilePaddingH) / (tileWidth + tilePaddingH));
-            var rows = (((tileset.height - (tileMarginTop + tileMarginBot)) + tilePaddingV) / (tileHeight + tilePaddingV));
+    var img = new Image();
+        img.onload = function() {
+
+            var columns = (((img.width - (tileMarginLeft + tileMarginRight)) + tilePaddingH) / (tileWidth + tilePaddingH));
+            var rows = (((img.height - (tileMarginTop + tileMarginBot)) + tilePaddingV) / (tileHeight + tilePaddingV));
 
             for(var i = 0; i < rows; i++) {
                 for(var j = 0; j < columns; j++) {
@@ -591,20 +633,20 @@ function populateTileset(file, newTileset) {
                           dy = 0,
                           dw = sw,
                           dh = sh;
-                    ctx.drawImage(tileset, sx, sy, sw, sh, dx, dy, dw, dh);
+                    ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
 
                     const tile = document.createElement('div');
                     tile.style.backgroundImage = 'url(' + canvas.toDataURL() + ')';
                     tile.classList.add('tile');
-                    newTileset.wrapper.appendChild(tile);
+                    tileset.wrapper.appendChild(tile);
                 }
             }
             // styling for tileset window in the case of overflow
-            if (newTileset.wrapper.scrollHeight > newTileset.wrapper.clientHeight  || newTileset.wrapper.scrollWidth > newTileset.wrapper.clientWidth) {
-                newTileset.wrapper.classList.add('tile-overflow');
+            if (tileset.wrapper.scrollHeight > tileset.wrapper.clientHeight  || tileset.wrapper.scrollWidth > tileset.wrapper.clientWidth) {
+                tileset.wrapper.classList.add('tile-overflow');
             }
         };
-        tileset.src = window.URL.createObjectURL(file);
+        img.src = window.URL.createObjectURL(file);
 }
 
 function buildTileset() { 
