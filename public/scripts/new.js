@@ -1,252 +1,3 @@
-// var html = document.querySelector('html');
-// var panelTop = document.querySelector('#panel-top');
-// var file = document.querySelector('#file');
-// var fileMenu = document.querySelector('#file-menu');
-// var view = document.querySelector('#view');
-// var viewMenu = document.querySelector('#view-menu');
-
-// var instruments = document.querySelectorAll('.instrument');
-
-// const tilesetName = document.querySelector('#tileset-name');
-// var tilePanelTop = document.querySelector('#tile-panel-top');
-// var tileMenu = document.querySelector('#tile-menu');
-// var tilePanelWindow = document.querySelector('#tile-panel-window');
-// var tilesetsContainer = document.querySelector('#tilesets-container');
-// var tilesets = [];
-
-// var formTitle = document.querySelector('#form-title');
-// var uploadTileset = document.querySelector('#upload-tileset');
-// var uploadForm = document.querySelector('#upload-form');
-// var uploadFormWindow = document.querySelector('#upload-form-window');
-// var uploadName = document.querySelector('#upload-name');
-// var uploadTileWidth = document.querySelector('#upload-tile-width');
-// var uploadTileHeight = document.querySelector('#upload-tile-height');
-// var uploadPaddingH = document.querySelector('#upload-padding-h');
-// var uploadPaddingV = document.querySelector('#upload-padding-v');
-// var uploadMarginLeft = document.querySelector('#upload-margin-left');
-// var uploadMarginRight = document.querySelector('#upload-margin-right');
-// var uploadMarginTop = document.querySelector('#upload-margin-top');
-// var uploadMarginBot = document.querySelector('#upload-margin-bot');
-// var uploadFormDelete = document.querySelector('#upload-form-delete');
-// var uploadFormAccept = document.querySelector('#upload-form-accept');
-// var numberInputs = document.querySelectorAll('.number-input');
-// var uploadInputs = document.querySelectorAll('#upload-form-options input');
-// var collapseButton = document.querySelectorAll('.collapse-button');
-// var collapsible = document.querySelectorAll('.collapsible');
-
-// var toolName = document.querySelector('#tool-name');
-// var toolPanelTop = document.querySelector('#tool-panel-top');
-// var toolMenu = document.querySelector('#tool-menu');
-// var toolLabels = document.querySelectorAll('.tool-label');
-
-// var tools = document.querySelectorAll('.tool');
-// var minimap = document.querySelector('#minimap');
-// var layers = document.querySelector('#layers');
-// var animation = document.querySelector('#animation');
-
-// // -------File, View------ //
-
-// function closeMenu(event){
-//     console.log(event.target);
-//     if(event.target.id != 'file' && event.target.parentNode.id != 'file-menu'){
-//         fileMenu.setAttribute('hidden', true);
-//     }
-//     if(event.target.id != 'view' && event.target.parentNode.id != 'view-menu'){
-//         viewMenu.setAttribute('hidden', true);
-//     }
-// }
-
-// html.addEventListener('mousedown', closeMenu);
-
-// panelTop.addEventListener('mouseover', function(event) {
-//     if (fileMenu.hasAttribute('hidden') == false) {
-//         if (event.target.id == 'view') {
-//             fileMenu.setAttribute('hidden', true);
-//             viewMenu.toggleAttribute('hidden');
-//         }
-//     }
-//     if (viewMenu.hasAttribute('hidden') == false) {
-//         if (event.target.id == 'file') {
-//             viewMenu.setAttribute('hidden', true);
-//             fileMenu.toggleAttribute('hidden');
-//         }
-//     }
-// })
-
-// file.addEventListener('mousedown', function(event) {
-//     viewMenu.setAttribute('hidden', true);
-//     fileMenu.toggleAttribute('hidden');
-// });
-
-// view.addEventListener('mousedown', function(event) {
-//     fileMenu.setAttribute('hidden', true);
-//     viewMenu.toggleAttribute('hidden');
-// });
-
-// // --------Instrument Buttons-------- //
-
-// instruments.forEach(function(button) {
-//     button.addEventListener('mousedown', function(){
-//         if (button.classList.contains('selected')) {
-//             button.classList.remove('selected');
-//         } else {
-//             instruments.forEach(function(button) {
-//                 button.classList.remove('selected');
-//             });
-//             button.classList.add('selected');
-//         }
-//     });
-// });
-
-// // --------Tile Panel--------- //
-
-// let activeTileset;
-// let activeTitle = tilesetName.innerHTML;
-// function toggleTileMenu() {
-//     if (activeTileset !== undefined) {
-//         if (tileMenu.hasAttribute('hidden')) {
-//             tilesetName.innerHTML = "Tile Menu<i class='fas fa-caret-right fa-lg arrow'></i>";
-//             tileMenu.removeAttribute('hidden');
-//         } else {
-//             tilesetName.innerHTML = activeTitle;
-//             tileMenu.setAttribute('hidden', true);
-//         }
-//     }
-// }
-// tilePanelTop.addEventListener('click', toggleTileMenu);
-
-// // ---------Tileset Upload Form--------- //
-
-// var fileTypes = [
-//     'image/jpg',
-//     'image/jpeg',
-//     'image/png',
-//     'image/gif'
-//   ]
-  
-// function validFileType(file) {
-//     for(var i = 0; i < fileTypes.length; i++) {
-//       if(file.type === fileTypes[i]) {
-//         return true;
-//       }
-//     }
-  
-//     return false;
-// }
-
-// uploadTileset.addEventListener('change', function() {
-//     formTitle.innerHTML = "Upload Tileset";
-//     numberInputs.forEach(function(numberInput){
-//         numberInput.value = "";
-//     });
-//     uploadFormDelete.classList.add('hidden');
-//     previewUpload();
-// });
-
-// function previewUpload(image) {
-//     while(uploadFormWindow.firstChild) {
-//         uploadFormWindow.removeChild(uploadFormWindow.firstChild);
-//     }
-
-//     uploadInputs.forEach(function(input) {
-//         input.classList.remove('invalid');
-//     });
-
-//     // edit tileset //
-//     if (image !== undefined) {
-//         var tileset = image.file;
-//         uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
-//         uploadName.value = image.name,
-//         uploadTileWidth.value = image.tileDimensions.tileWidth,
-//         uploadTileHeight.value = image.tileDimensions.tileHeight,
-//         uploadPaddingH.value = image.tileDimensions.tilePaddingH,
-//         uploadPaddingV.value = image.tileDimensions.tilePaddingV,
-//         uploadMarginLeft.value = image.tileDimensions.tileMarginLeft,
-//         uploadMarginRight.value = image.tileDimensions.tileMarginRight,
-//         uploadMarginTop.value = image.tileDimensions.tileMarginTop,
-//         uploadMarginBot.value = image.tileDimensions.tileMarginBot;
-
-//     // upload tileset //
-//     } else {
-//         var tileset = uploadTileset.files[0];
-//         if (validFileType(tileset)) {
-//             uploadFormWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset) + "')";
-//             uploadName.value = tileset.name;
-//         } else {
-//             alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.");
-//         }
-//     }
-
-//     // display image dimensions //
-//     const uploadDimensions = new Image();
-//     uploadDimensions.src = window.URL.createObjectURL(tileset);
-//     uploadDimensions.onload = function() {
-//         var dimensions = document.createElement('span');
-//         dimensions.innerHTML = String(uploadDimensions.width + " x " + uploadDimensions.height);
-//         dimensions.classList.add('dimensions');
-//         uploadFormWindow.appendChild(dimensions);
-//     }
-
-//     collapsible.forEach(function(div){
-//         let hasValue = false;
-//         [...div.children].forEach(function(child) {
-//             if (~~child.value !== 0) {
-//                 hasValue = true;
-//                 console.log(child.value);
-//             }
-//         });
-//         div.toggleAttribute('hidden', !hasValue);
-//     });
-    
-//     uploadForm.removeAttribute('hidden');
-// }
-
-// uploadForm.addEventListener('click', closeForm);
-// function closeForm() {
-//     if(event.target.classList.contains('close-form') || event.target.parentNode.classList.contains('close-form')) {
-//         uploadForm.setAttribute('hidden', true);
-//     }
-// }
-
-// uploadFormAccept.addEventListener('click', buildTileset);
-
-// function verifyInput() {
-//     let valid = true;
-//     uploadInputs.forEach(function(input) {
-//         input.classList.remove('invalid');
-//     });
-    
-//     tilesets.forEach(function(tileset) {
-//         if (uploadName.value == tileset.name || uploadName.value == "" || uploadName.value == undefined){
-//             uploadName.classList.add('invalid');
-//             valid = false;
-//         }
-//     });
-    
-//     numberInputs.forEach(function(numberInput){
-//         let NiV = numberInput.value;
-//         if (isNaN(NiV)) {
-//             numberInput.classList.add('invalid');
-//             valid = false;
-//         } else if (NiV == "" && numberInput.parentNode.id == 'tile-dimensions-input') {
-//             numberInput.classList.add('invalid');
-//             valid = false;
-//         } else if (NiV == "" && numberInput.parentNode.id !== 'tile-dimensions-input') {
-//             this.value = 0;
-//             numberInput.classList.remove('invalid');
-//         } else {
-//             numberInput.classList.remove('invalid');
-//         }
-//     });
-//     return valid;
-// }
-
-// collapseButton.forEach(function(button){
-//     button.addEventListener('mousedown', function(){
-//         button.parentElement.nextElementSibling.toggleAttribute('hidden');
-//     })
-// })
-
 // ---------------- //
 // GLOBAL VARIABLES //
 // ---------------- //
@@ -483,6 +234,8 @@ function showForm(image) {
         [...div.children].forEach(function(child) {
             if (~~child.value !== 0) {
                 hasValue = true;
+            } else {
+                child.value = '';
             }
         });
         div.toggleAttribute('hidden', !hasValue);
@@ -536,8 +289,6 @@ function addTileset() {
     showForm(image);
 }
 
-// test opening an edit form and uploading an invalid file type to see if it resets the values in the form
-
 uploadTileset.addEventListener('change', addTileset);
 
 // EDIT TILESET //
@@ -563,24 +314,69 @@ function editTileset(tileset) {
     showForm(tileset.file);
 }
 
-// cog.addeventlistener('click', editTileset(tileset))
-
-formAccept.addEventListener('click', function() {
-    if (isEditing) {
-        if (verifyInput(editingTileset)) {
-            updateTileset(editingTileset);
-        }
-    } else {
-        if (verifyInput()) {
-            createTileset();
-        }
-    }
-});
-
+// CREATE TILESET //
 function createTileset() {
-    // todo
+    const file = uploadTileset.files[0],
+          name = String(formName.value),
+          tileDimensions = {
+              tileWidth: Number(formTileWidth.value),
+              tileHeight: Number(formTileHeight.value),
+              tilePaddingH: Number(formPaddingH.value),
+              tilePaddingV: Number(formPaddingV.value),
+              tileMarginLeft: Number(formMarginLeft.value),
+              tileMarginRight: Number(formMarginRight.value),
+              tileMarginTop: Number(formMarginTop.value),
+              tileMarginBot: Number(formMarginBot.value)
+          },
+          wrapper = document.createElement('div'),
+          label = document.createElement('label');
+
+    wrapper.classList.add('tile-panel-window-content');
+    tilesetsContainer.appendChild(wrapper);
+
+    label.innerHTML = name + '<i class="fas fa-cog"></i>';
+    label.classList.add('menu-item');
+    tileMenu.appendChild(label);
+
+    activeTitle = name + "<i class='fas fa-caret-right fa-lg arrow'></i>";
+    tilesetName.innerHTML = activeTitle;
+    tileMenu.setAttribute('hidden', true);
+
+    const newTileset = new Tileset(file, name, tileDimensions, wrapper, label);
+    tilesets.push(newTileset);
+    activeTileset = newTileset;
+
+    buildTileset(file, newTileset);
+    form.setAttribute('hidden', true);
+
+    // add event listener for switching to this tileset from the menu
+    label.addEventListener('click', function() {
+
+        if (event.target.classList.contains('fa-cog')) {
+            editTileset(newTileset);
+        } else {
+            // hide all tileset panes
+            tilesets.forEach(function(tileset) {
+                tileset.wrapper.setAttribute('hidden', true);
+            });
+
+            activeTileset = newTileset;
+            activeTileset.wrapper.removeAttribute('hidden');
+            tileMenu.setAttribute('hidden', true);
+
+            activeTitle = activeTileset.name + "<i class='fas fa-caret-right fa-lg arrow'></i>";
+            tilesetName.innerHTML = activeTitle;
+
+            if (wrapper.scrollHeight > wrapper.clientHeight  || wrapper.scrollWidth > wrapper.clientWidth) {
+                wrapper.classList.add('tile-overflow');
+            } else {
+                wrapper.classList.remove('tile-overflow');
+            }
+        }
+    });
 }
 
+// UPDATE TILESET //
 function updateTileset(tileset) {
     tileset.name = formName.value;
     tileset.tileDimensions.tileWidth = Number(formTileWidth.value);
@@ -591,14 +387,21 @@ function updateTileset(tileset) {
     tileset.tileDimensions.tileMarginRight = Number(formMarginRight.value);
     tileset.tileDimensions.tileMarginTop = Number(formMarginTop.value);
     tileset.tileDimensions.tileMarginBot = Number(formMarginBot.value);
+    tileset.label.innerHTML = tileset.name + '<i class="fas fa-cog"></i>';
 
-    populateTileset(tileset.file, tileset);
-    uploadForm.setAttribute('hidden', true);
+    activeTileset = tileset;
+    activeTileset.wrapper.removeAttribute('hidden');
+    tileMenu.setAttribute('hidden', true)
+    activeTitle = activeTileset.name + "<i class='fas fa-caret-right fa-lg arrow'></i>";
+    tilesetName.innerHTML = activeTitle;
+
+    buildTileset(tileset.file, tileset);
+    form.setAttribute('hidden', true);
 }
 
-// --------Tileset Building-------- //
+// BUILD TILESET //
 
-function populateTileset(file, tileset) {
+function buildTileset(file, tileset) {
     var tileWidth = tileset.tileDimensions.tileWidth;
     var tileHeight = tileset.tileDimensions.tileHeight;
     var tilePaddingH = tileset.tileDimensions.tilePaddingH;
@@ -644,109 +447,55 @@ function populateTileset(file, tileset) {
             // styling for tileset window in the case of overflow
             if (tileset.wrapper.scrollHeight > tileset.wrapper.clientHeight  || tileset.wrapper.scrollWidth > tileset.wrapper.clientWidth) {
                 tileset.wrapper.classList.add('tile-overflow');
+            } else {
+                tileset.wrapper.classList.remove('tile-overflow');
             }
         };
         img.src = window.URL.createObjectURL(file);
 }
 
-function buildTileset() { 
-    if (verifyInput()) {
-        uploadForm.setAttribute('hidden', true);
-
-        const newTilesetName = String(uploadName.value),
-              newTilesetFile = uploadTileset.files[0],
-              newTilesetTitle = newTilesetName + "<i class='fas fa-caret-right fa-lg arrow'></i>",
-              tileDimensions = {
-                tileWidth: Number(uploadTileWidth.value),
-                tileHeight: Number(uploadTileHeight.value),
-                tilePaddingH: Number(uploadPaddingH.value),
-                tilePaddingV: Number(uploadPaddingV.value),
-                tileMarginLeft: Number(uploadMarginLeft.value),
-                tileMarginRight: Number(uploadMarginRight.value),
-                tileMarginTop: Number(uploadMarginTop.value),
-                tileMarginBot: Number(uploadMarginBot.value)
-              };
-
-        // create tileset wrapper div and label
-        const wrapper = document.createElement('div'),
-              label = document.createElement('label');
-
-        wrapper.id = newTilesetName + '-ts';
-        wrapper.classList.add('tile-panel-window-content');
-        tilesetsContainer.appendChild(wrapper);
-
-        label.innerHTML = newTilesetName + '<i class="fas fa-cog"></i>';
-        label.classList.add('menu-item');
-        tileMenu.appendChild(label);
-
-        // updating tileset pane with this tile information
-        activeTitle = newTilesetTitle;
-        tilesetName.innerHTML = activeTitle;
-        tileMenu.setAttribute('hidden', true);
-
-        const newTileset = new Tileset(newTilesetFile, newTilesetName, tileDimensions, wrapper);
-        tilesets.push(newTileset);
-        activeTileset = newTileset;
-
-        populateTileset(newTilesetFile, newTileset);
-       
-        window.onresize = function() {
-            tilesets.forEach(function(tileset){
-                if (tileset.wrapper.scrollHeight > tileset.wrapper.clientHeight  || tileset.wrapper.scrollWidth > tileset.wrapper.clientWidth) {
-                    tileset.wrapper.classList.add('tile-overflow');
-                } else {
-                    tileset.wrapper.classList.remove('tile-overflow');
-                }
-            });
-        };
-
-
-        // add event listener for switching to this tileset from the menu
-        label.addEventListener('click', function() {
-
-            if (event.target.classList.contains('fa-cog')) {
-                formTitle.innerHTML = "Edit Tileset";
-                uploadFormDelete.classList.remove('hidden');
-                previewUpload(newTileset);
-
-                uploadFormDelete.addEventListener('click', function() {
-                    if (newTileset == activeTileset) {
-                        tilesetName.innerHTML = "Tile Menu<i class='fas fa-caret-right fa-lg arrow'></i>";
-                        tileMenu.removeAttribute('hidden');
-                        activeTileset = undefined;
-                    }
-                    tilesets.splice(tilesets.indexOf(newTileset), 1);
-                    label.parentNode.removeChild(label);
-                    wrapper.parentNode.removeChild(wrapper);
-                    uploadForm.setAttribute('hidden', true);
-                 });
-
-            } else {
-                // hide all tileset panes
-                tilesets.forEach(function(tileset) {
-                    tileset.wrapper.setAttribute('hidden', true);
-                });
-
-                activeTileset = newTileset;
-                activeTileset.wrapper.removeAttribute('hidden');
-                tileMenu.setAttribute('hidden', true);
-
-                activeTitle = activeTileset.name + "<i class='fas fa-caret-right fa-lg arrow'></i>";
-                tilesetName.innerHTML = activeTitle;
-
-                if (wrapper.scrollHeight > wrapper.clientHeight  || wrapper.scrollWidth > wrapper.clientWidth) {
-                    wrapper.classList.add('tile-overflow');
-                } else {
-                    wrapper.classList.remove('tile-overflow');
-                }
-            }
-        });
-        
-        
+formAccept.addEventListener('click', function() {
+    if (isEditing) {
+        if (verifyInput(editingTileset)) {
+            updateTileset(editingTileset);
+        }
+    } else {
+        if (verifyInput()) {
+            createTileset();
+        }
     }
+});
+
+// DELETE TILESET //
+function deleteTileset() {
+    if (editingTileset == activeTileset) {
+        tilesetName.innerHTML = "Tile Menu<i class='fas fa-caret-right fa-lg arrow'></i>";
+        tileMenu.removeAttribute('hidden');
+        activeTileset = undefined;
+    }
+
+    editingTileset.label.parentNode.removeChild(editingTileset.label);
+    editingTileset.wrapper.parentNode.removeChild(editingTileset.wrapper);
+    tilesets.splice(tilesets.indexOf(editingTileset), 1);
+    form.setAttribute('hidden', true);
 }
 
-// --------Tool Panel--------- //
+formDelete.addEventListener('click', deleteTileset);
+
+// Overflow control for window resize //
+window.onresize = function() {
+    tilesets.forEach(function(tileset){
+        if (tileset.wrapper.scrollHeight > tileset.wrapper.clientHeight  || tileset.wrapper.scrollWidth > tileset.wrapper.clientWidth) {
+            tileset.wrapper.classList.add('tile-overflow');
+        } else {
+            tileset.wrapper.classList.remove('tile-overflow');
+        }
+    });
+};
+
+// ---------- //
+// TOOL PANEL //
+// ---------- //
 
 let toolTitle = toolName.innerHTML;
 toolPanelTop.addEventListener('click', function() {

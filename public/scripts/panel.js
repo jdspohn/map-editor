@@ -215,16 +215,6 @@ collapseButton.forEach(function(button) {
     });
 });
 
-// CLEAR FORM //
-function clearForm() {
-    while(formWindow.firstChild) {
-        formWindow.removeChild(formWindow.firstChild);
-    }
-    formInputs.forEach(function(input) {
-        input.classList.remove('invalid');
-    });
-}
-
 // SHOW FORM //
 function showForm(image) {
 
@@ -260,53 +250,185 @@ function closeForm() {
 }
 form.addEventListener('click', closeForm);
 
-// ADD TILESET //
-function addTileset() {
-    let image = uploadTileset.files[0];
-    if (validFileType(image)) {
-        clearForm();
-        numberInputs.forEach(function(numberInput){
-            numberInput.value = "";
-        });
-        formTitle.innerHTML = "Upload Tileset";
-        formWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(image) + "')";
-        formName.value = image.name;
-        formDelete.classList.add('hidden');
-        showForm(image);
-        formAccept.addEventListener('click', function() {
-            verifyInput();
-        });
-    } else {
-        alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.");
+// CLEAR FORM //
+function clearForm() {
+
+    // remove old image and dimension text overlay
+    while (formWindow.firstChild) {
+        formWindow.removeChild(formWindow.firstChild);
     }
+
+    // remove red borders around input fields
+    formInputs.forEach(input => input.classList.remove('invalid'));
+    
+    // set input fields to blank
+    numberInputs.forEach(input => input.value = '');
 }
 
-uploadTileset.addEventListener('change', addTileset);
+let isEditing = false,
+    editingTileset;
+
+// ADD TILESET //
+function addTileset() {
+    const image = uploadTileset.files[0];
+    if (!validFileType(image)) {
+        return alert("Not a valid file type. Only .jpg, .png, or .gif are accepted.");
+    }
+
+    isEditing = false;
+
+    clearForm();
+    formTitle.innerHTML = "Upload Tileset";
+    formWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(image) + "')";
+    formDelete.classList.add('hidden');
+
+    formName.value = image.name;
+
+    showForm(image);
+}
 
 // test opening an edit form and uploading an invalid file type to see if it resets the values in the form
 
+uploadTileset.addEventListener('change', addTileset);
+
+// EDIT TILESET //
 function editTileset(tileset) {
     clearForm();
-    let image = tileset.file;
-        formWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(image) + "')";
-        formName.value = tileset.name,
-        formTileWidth.value = tileset.tileDimensions.tileWidth,
-        formTileHeight.value = tileset.tileDimensions.tileHeight,
-        formPaddingH.value = tileset.tileDimensions.tilePaddingH,
-        formPaddingV.value = tileset.tileDimensions.tilePaddingV,
-        formMarginLeft.value = tileset.tileDimensions.tileMarginLeft,
-        formMarginRight.value = tileset.tileDimensions.tileMarginRight,
-        formMarginTop.value = tileset.tileDimensions.tileMarginTop,
-        formMarginBot.value = tileset.tileDimensions.tileMarginBot;
+    formTitle.innerHTML = "Edit Tileset";
+    formWindow.style.backgroundImage = "url('" + window.URL.createObjectURL(tileset.file) + "')";
     formDelete.classList.remove('hidden');
-    showForm(image);
-    formAccept.addEventListener('click', function() {
-        verifyInput(tileset);
-    });
+
+    isEditing = true;
+    editingTileset = tileset;
+
+    formName.value        = tileset.name;
+    formTileWidth.value   = tileset.tileDimensions.tileWidth;
+    formTileHeight.value  = tileset.tileDimensions.tileHeight;
+    formPaddingH.value    = tileset.tileDimensions.tilePaddingH;
+    formPaddingV.value    = tileset.tileDimensions.tilePaddingV;
+    formMarginLeft.value  = tileset.tileDimensions.tileMarginLeft;
+    formMarginRight.value = tileset.tileDimensions.tileMarginRight;
+    formMarginTop.value   = tileset.tileDimensions.tileMarginTop;
+    formMarginBot.value   = tileset.tileDimensions.tileMarginBot;
+
+    showForm(tileset.file);
 }
 
 // cog.addeventlistener('click', editTileset(tileset))
 
 // CREATE TILESET //
+function createTileset() {
+    const newTilesetName = String(formName.value),
+          newTilesetFile = uploadTileset.files[0],
+          newTilesetTitle = newTilesetName + "<i class='fas fa-caret-right fa-lg arrow'></i>",
+          tileDimensions = {
+              tileWidth: Number(formTileWidth.value),
+              tileHeight: Number(formTileHeight.value),
+              tilePaddingH: Number(formPaddingH.value),
+              tilePaddingV: Number(formPaddingV.value),
+              tileMarginLeft: Number(formMarginLeft.value),
+              tileMarginRight: Number(formMarginRight.value),
+              tileMarginTop: Number(formMarginTop.value),
+              tileMarginBot: Number(formMarginBot.value)
+          };
+    
+    // create tileset wrapper div and label
+    const wrapper = document.createElement('div'),
+          label = document.createElement('label');
+
+    wrapper.classList.add('tile-panel-window-content');
+    tilesetsContainer.appendChild(wrapper);
+
+    label.innerHTML = newTilesetName + '<i class="fas fa-cog"></i>';
+    label.classList.add('menu-item');
+    tileMenu.appendChild(label);
+
+    activeTitle = newTilesetTitle;
+    tilesetName.innerHTML = activeTitle;
+    tileMenu.setAttribute('hidden', true);
+
+    const newTileset = new Tileset(newTilesetFile, newTilesetName, tileDimensions, wrapper, label);
+    tilesets.push(newTileset);
+    activeTileset = newTileset;
+
+    populateTileset(newTilesetFile, newTileset);
+    form.setAttribute('hidden', true);
+
+    // add event listener for switching to this tileset from the menu
+    label.addEventListener('click', function() {
+
+        if (event.target.classList.contains('fa-cog')) {
+            editTileset(newTileset);
+        } else {
+            // hide all tileset panes
+            tilesets.forEach(function(tileset) {
+                tileset.wrapper.setAttribute('hidden', true);
+            });
+
+            activeTileset = newTileset;
+            activeTileset.wrapper.removeAttribute('hidden');
+            tileMenu.setAttribute('hidden', true);
+
+            activeTitle = activeTileset.name + "<i class='fas fa-caret-right fa-lg arrow'></i>";
+            tilesetName.innerHTML = activeTitle;
+
+            if (wrapper.scrollHeight > wrapper.clientHeight  || wrapper.scrollWidth > wrapper.clientWidth) {
+                wrapper.classList.add('tile-overflow');
+            } else {
+                wrapper.classList.remove('tile-overflow');
+            }
+        }
+    });
+}
+
+formDelete.addEventListener('click', function() {
+    if (newTileset == activeTileset) {
+        tilesetName.innerHTML = "Tile Menu<i class='fas fa-caret-right fa-lg arrow'></i>";
+        tileMenu.removeAttribute('hidden');
+        activeTileset = undefined;
+    }
+    tilesets.splice(tilesets.indexOf(newTileset), 1);
+    label.parentNode.removeChild(label);
+    wrapper.parentNode.removeChild(wrapper);
+    form.setAttribute('hidden', true);
+ });
+
+ 
+ window.onresize = function() {
+    tilesets.forEach(function(tileset){
+        if (tileset.wrapper.scrollHeight > tileset.wrapper.clientHeight  || tileset.wrapper.scrollWidth > tileset.wrapper.clientWidth) {
+            tileset.wrapper.classList.add('tile-overflow');
+        } else {
+            tileset.wrapper.classList.remove('tile-overflow');
+        }
+    });
+};
 
 // UPDATE TILESET //
+function updateTileset(tileset) {
+    tileset.name = String(formName.value);
+    tileset.tileDimensions.tileWidth = Number(formTileWidth.value);
+    tileset.tileDimensions.tileHeight = Number(formTileHeight.value);
+    tileset.tileDimensions.tilePaddingH = Number(formPaddingH.value);
+    tileset.tileDimensions.tilePaddingV = Number(formPaddingV.value);
+    tileset.tileDimensions.tileMarginLeft = Number(formMarginLeft.value);
+    tileset.tileDimensions.tileMarginRight = Number(formMarginRight.value);
+    tileset.tileDimensions.tileMarginTop = Number(formMarginTop.value);
+    tileset.tileDimensions.tileMarginBot = Number(formMarginBot.value);
+    tileset.label.innerHTML = tileset.name + '<i class="fas fa-cog"></i>';
+
+    populateTileset(tileset.file, tileset);
+    uploadForm.setAttribute('hidden', true);
+}
+
+formAccept.addEventListener('click', function() {
+    if (isEditing) {
+        if (verifyInput(editingTileset)) {
+            updateTileset(editingTileset);
+        }
+    } else {
+        if (verifyInput()) {
+            createTileset();
+        }
+    }
+});
