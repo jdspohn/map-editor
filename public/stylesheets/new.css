@@ -438,10 +438,13 @@ body {
     width: 100%;
 }
 
+.collapse-button {
+    cursor: pointer;
+}
+
 #form-options .arrow {
     position: relative;
     left: 10px;
-    cursor: pointer;
 }
 
 #form-options input {

@@ -211,7 +211,7 @@ function verifyInput(tileset) {
 // Manually Collapse Padding and Margin Fields //
 collapseButton.forEach(function(button) {
     button.addEventListener('mousedown', function() {
-        button.parentElement.nextElementSibling.toggleAttribute('hidden');
+        button.nextElementSibling.toggleAttribute('hidden');
     });
 });
 
