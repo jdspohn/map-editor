@@ -531,3 +531,7 @@ body {
     min-height: 475px;
     /* background-color: black; */
 }
+
+.hide-cursor {
+    cursor: none;
+}

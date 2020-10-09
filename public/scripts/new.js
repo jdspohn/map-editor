@@ -57,8 +57,9 @@ const tools = document.querySelectorAll('.tool'),
       animation = document.querySelector('#animation');
 
 // Canvas //
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.getElementById('canvas'),
+      ctx = canvas.getContext('2d'),
+      map = [];
 
 // --------------------- //
 // Panel Top: File, View //
@@ -545,6 +546,7 @@ let img;
 function selectTile(event) {
     if (event.target.classList.contains('tile-select')) {
         event.target.classList.remove('tile-select');
+        canvas.classList.remove('hide-cursor');
         activeTile = undefined;
         img = undefined;
     } else {
@@ -558,13 +560,30 @@ function selectTile(event) {
         }
         img = new Image()
         img.src = (String(activeTile.style.backgroundImage)).slice(5, -2);
+        canvas.classList.add('hide-cursor');
     }    
 }
 
 // Draw Selected Tile //
 
-canvas.addEventListener('click', function() {
-    if(activeTile) {
-        ctx.drawImage(img, 0, 0);
+canvas.addEventListener('mousemove', function(event) {
+    if (activeTile) {
+        ctx.save();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //map.build
+        ctx.filter = 'grayscale(100%) brightness(150%)';
+        ctx.drawImage(img, event.clientX - 275, event.clientY);
+        ctx.restore();
+    }
+});
+
+canvas.addEventListener('mouseout', function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+})
+
+canvas.addEventListener('click', function(event) {
+    if (activeTile) {
+        ctx.drawImage(img, event.clientX - 275, event.clientY);
+        map.push(activeTile);
     }
 });
