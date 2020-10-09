@@ -1,5 +1,6 @@
 html {
     height: 100vh;
+    min-height: 475px;
 }
 
 body {
@@ -18,6 +19,7 @@ body {
     width: 274px;
     height: 100vh;
     border-right: 1px solid rgb(0,0,0);
+    min-height: 475px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -131,7 +133,7 @@ body {
     height: calc(100% - 366px);
     border-radius: 2px;
     border: 1px solid rgb(0,0,0);
-    min-height: 105px;
+    min-height: 108px;
 }
 
 #tile-panel-top {
@@ -205,8 +207,12 @@ body {
     /* background-color: rgba(255, 140, 0, 0.75);
     border: 2px solid rgba(255, 140, 0, 0.5); */
     background-color: skyblue;
-    border: 2px solid rgba(135, 207, 235, 0.5);
+    /* border: 2px solid rgba(135, 207, 235, 0.5); */
     border-radius: 5px;
+}
+
+.tile-select {
+    border: 2px dashed rgba(255, 140, 0, 0.75);
 }
 
 .tile-panel-window-content {
@@ -514,4 +520,14 @@ body {
 
 .hidden {
     display: none;
+}
+
+/* ---------- Canvas ---------- */
+
+#canvas {
+    position: absolute;
+    top: 0px;
+    left: 275px;
+    min-height: 475px;
+    /* background-color: black; */
 }

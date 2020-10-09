@@ -56,6 +56,10 @@ const tools = document.querySelectorAll('.tool'),
       layers = document.querySelector('#layers'),
       animation = document.querySelector('#animation');
 
+// Canvas //
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
 // --------------------- //
 // Panel Top: File, View //
 // --------------------- //
@@ -245,7 +249,7 @@ function showForm(image) {
 }
 
 // CLOSE FORM //
-function closeForm() {
+function closeForm(event) {
     if (event.target.classList.contains('close-form') || event.target.parentNode.classList.contains('close-form')) {
         form.setAttribute('hidden', true);
     }
@@ -350,7 +354,7 @@ function createTileset() {
     form.setAttribute('hidden', true);
 
     // add event listener for switching to this tileset from the menu
-    label.addEventListener('click', function() {
+    label.addEventListener('click', function(event) {
 
         if (event.target.classList.contains('fa-cog')) {
             editTileset(newTileset);
@@ -441,6 +445,7 @@ function buildTileset(file, tileset) {
                     const tile = document.createElement('div');
                     tile.style.backgroundImage = 'url(' + canvas.toDataURL() + ')';
                     tile.classList.add('tile');
+                    tile.addEventListener('mousedown', selectTile);
                     tileset.wrapper.appendChild(tile);
                 }
             }
@@ -482,8 +487,9 @@ function deleteTileset() {
 
 formDelete.addEventListener('click', deleteTileset);
 
+
 // Overflow control for window resize //
-window.onresize = function() {
+window.addEventListener('resize', function(){
     tilesets.forEach(function(tileset){
         if (tileset.wrapper.scrollHeight > tileset.wrapper.clientHeight  || tileset.wrapper.scrollWidth > tileset.wrapper.clientWidth) {
             tileset.wrapper.classList.add('tile-overflow');
@@ -491,7 +497,7 @@ window.onresize = function() {
             tileset.wrapper.classList.remove('tile-overflow');
         }
     });
-};
+});
 
 // ---------- //
 // TOOL PANEL //
@@ -518,4 +524,47 @@ toolLabels.forEach(function(label, arrayIndex) {
         toolName.innerHTML = toolLabels[arrayIndex].textContent + "<i class='fas fa-caret-right fa-lg arrow'></i>"
         toolTitle = toolName.innerHTML;
     });
+});
+
+// ------ //
+// CANVAS //
+// ------ //
+
+// Resize Canvas //
+window.addEventListener('resize', resizeCanvas);
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth - 275;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+
+// Select Tile //
+let activeTile;
+let img;
+function selectTile(event) {
+    if (event.target.classList.contains('tile-select')) {
+        event.target.classList.remove('tile-select');
+        activeTile = undefined;
+        img = undefined;
+    } else {
+        if (activeTile) {
+            activeTile.classList.remove('tile-select');
+            activeTile = event.target;
+            event.target.classList.add('tile-select');
+        } else {
+            event.target.classList.add('tile-select');
+            activeTile = event.target;
+        }
+        img = new Image()
+        img.src = (String(activeTile.style.backgroundImage)).slice(5, -2);
+    }    
+}
+
+// Draw Selected Tile //
+
+canvas.addEventListener('click', function() {
+    if(activeTile) {
+        ctx.drawImage(img, 0, 0);
+    }
 });
