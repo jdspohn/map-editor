@@ -57,9 +57,7 @@ const tools = document.querySelectorAll('.tool'),
       animation = document.querySelector('#animation');
 
 // Canvas //
-const canvas = document.getElementById('canvas'),
-      ctx = canvas.getContext('2d'),
-      map = [];
+const canvas = document.getElementById('canvas');
 
 // --------------------- //
 // Panel Top: File, View //
@@ -531,59 +529,66 @@ toolLabels.forEach(function(label, arrayIndex) {
 // CANVAS //
 // ------ //
 
+const mapEngine = new Engine();
+const app = new Application(canvas);
+
+mapEngine.start();
+
 // Resize Canvas //
 window.addEventListener('resize', resizeCanvas);
 
 function resizeCanvas() {
-    canvas.width = window.innerWidth - 275;
-    canvas.height = window.innerHeight;
+    app.canvas.width = window.innerWidth - 275;
+    app.canvas.height = window.innerHeight;
 }
 resizeCanvas();
 
 // Select Tile //
-let activeTile;
-let img;
 function selectTile(event) {
     if (event.target.classList.contains('tile-select')) {
         event.target.classList.remove('tile-select');
         canvas.classList.remove('hide-cursor');
-        activeTile = undefined;
-        img = undefined;
+        app.activeTile = undefined;
+        app.img = undefined;
     } else {
-        if (activeTile) {
-            activeTile.classList.remove('tile-select');
-            activeTile = event.target;
+        if (app.activeTile) {
+            app.activeTile.classList.remove('tile-select');
+            app.activeTile = event.target;
             event.target.classList.add('tile-select');
         } else {
             event.target.classList.add('tile-select');
-            activeTile = event.target;
+            app.activeTile = event.target;
         }
-        img = new Image()
-        img.src = (String(activeTile.style.backgroundImage)).slice(5, -2);
+        app.img = new Image()
+        app.img.src = (String(app.activeTile.style.backgroundImage)).slice(5, -2);
         canvas.classList.add('hide-cursor');
     }    
 }
 
-// Draw Selected Tile //
-
+// Submit Cursor Coordinates //
 canvas.addEventListener('mousemove', function(event) {
-    if (activeTile) {
-        ctx.save();
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        //map.build
-        ctx.filter = 'grayscale(100%) brightness(150%)';
-        ctx.drawImage(img, event.clientX - 275, event.clientY);
-        ctx.restore();
-    }
+        app.mouse.x = event.clientX - 275;
+        app.mouse.y = event.clientY;
+     // else if (eraser) { 
+        // determine position of mouse relative to origin of that layer
+        // check if a tile exists in that location on that layer
+        // if it exists make a special parameter call that highlights that tile when the map is rendered (ex map.build(x))
+            // - the parameter corresponds to the position of the tile in the array
+    //  }
+});
+
+// Draw Selected Tile //
+canvas.addEventListener('click', function(event) {
+    if (app.activeTile) {
+        // determine position of mouse relative to origin of that layer
+        // add the tile to its appropriate place in the array
+        // map.build
+        app.ctx.drawImage(app.img, event.clientX - 275, event.clientY);
+    } // else if (eraser) 
+      // else if (eyedropper)
 });
 
 canvas.addEventListener('mouseout', function() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-})
-
-canvas.addEventListener('click', function(event) {
-    if (activeTile) {
-        ctx.drawImage(img, event.clientX - 275, event.clientY);
-        map.push(activeTile);
-    }
+    app.mouse.x = undefined;
+    app.mouse.y = undefined;
 });

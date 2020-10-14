@@ -204,15 +204,13 @@ body {
 }
 
 .tile:hover {
-    /* background-color: rgba(255, 140, 0, 0.75);
-    border: 2px solid rgba(255, 140, 0, 0.5); */
-    background-color: skyblue;
-    /* border: 2px solid rgba(135, 207, 235, 0.5); */
+    background-color: rgb(100,100,100);
     border-radius: 5px;
 }
 
 .tile-select {
-    border: 2px dashed rgba(255, 140, 0, 0.75);
+    background-color: rgb(100,100,100);
+    border: 2px dashed skyblue;
 }
 
 .tile-panel-window-content {
