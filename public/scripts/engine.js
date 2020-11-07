@@ -23,7 +23,7 @@ class Engine {
 
     stop() {
         cancelAnimationFrame(this.frame);
-        console.log("Engine stopped...");
+        console.log("Engine stopped.");
     }
 
 }

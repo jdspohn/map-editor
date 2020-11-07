@@ -9,7 +9,8 @@ const panelTop = document.querySelector('#panel-top'),
       file = document.querySelector('#file'),
       fileMenu = document.querySelector('#file-menu'),
       view = document.querySelector('#view'),
-      viewMenu = document.querySelector('#view-menu');
+      viewMenu = document.querySelector('#view-menu'),
+      viewGrid = document.querySelector('#view-grid');
 
 // Instruments //
 const instruments = document.querySelectorAll('.instrument');
@@ -419,7 +420,7 @@ function buildTileset(file, tileset) {
     canvas.width = tileWidth;
     canvas.height = tileHeight;
 
-    // clear wrapper incase we're using new edited values
+    // clear wrapper in the case of using new edited values
     tileset.wrapper.innerHTML = '';
 
     var img = new Image();
@@ -456,6 +457,10 @@ function buildTileset(file, tileset) {
             }
         };
         img.src = window.URL.createObjectURL(file);
+        if (tilesets.length == 1) {
+            app.tw = tileWidth;
+            app.th = tileHeight;
+        }
 }
 
 formAccept.addEventListener('click', function() {
@@ -482,6 +487,11 @@ function deleteTileset() {
     editingTileset.wrapper.parentNode.removeChild(editingTileset.wrapper);
     tilesets.splice(tilesets.indexOf(editingTileset), 1);
     form.setAttribute('hidden', true);
+    if (tilesets.length == 0) {
+        app.tw = undefined;
+        app.th = undefined;
+        app.activeGrid = undefined;
+    }
 }
 
 formDelete.addEventListener('click', deleteTileset);
@@ -582,7 +592,7 @@ canvas.addEventListener('click', function(event) {
     if (app.activeTile) {
         // determine position of mouse relative to origin of that layer
         // add the tile to its appropriate place in the array
-        // map.build
+        // app.addTile
         app.ctx.drawImage(app.img, event.clientX - 275, event.clientY);
     } // else if (eraser) 
       // else if (eyedropper)
@@ -591,4 +601,16 @@ canvas.addEventListener('click', function(event) {
 canvas.addEventListener('mouseout', function() {
     app.mouse.x = undefined;
     app.mouse.y = undefined;
+});
+
+// Show Grid //
+app.activeGrid = undefined;
+viewGrid.addEventListener('click', function() {
+    if (app.tw) {
+        if (app.activeGrid) {
+            app.activeGrid = undefined;
+        } else {
+            app.activeGrid = true;
+        }
+    }
 });
